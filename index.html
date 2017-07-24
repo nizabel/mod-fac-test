@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>The Mod Fac test</title>
+		<meta name="author" content="Henrik Bagger"/>
+		<meta name="application-name" content="The Mod Fac test"/>
+		<meta name="copyright" content="© 2017 Henrik Bagger"/>
+		<meta name="description" content="A graphical experiment with multiplication in modular integer rings."/>
+		<script class="license" type="text/plain">
+This program is licensed under the MIT License
+
+		The MIT License (MIT)
+
+Copyright (c) 2017 Henrik Bagger
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-------------------------------------------------------------------------------
+This program uses artwork from https://feathericons.com that are licensed as
+follows:
+
+		The MIT License (MIT)
+
+Copyright (c) 2013-2017 Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+		</script>
+	</head>
+
+	<style type="text/css">
+		body {
+/* These varaibles should be defined here - but are moved to the JS (convience) */
+		/*
+			--themeDayColor
+			--themeDayBackground
+			--themeDayHighlight
+			--themeNightColor
+			--themeNightBackground
+			--themeNightHighlight
+		*/
+
+		/*	Variables used in the CSS */
+		/*
+			--color: black; 
+			--bgcolor: white;
+			--highlight: Green;
+			--patchpos: 51px;
+			--btnsize: 36px;
+		*/
+			--fontsize:calc(var(--btnsize)/2);
+			--imgsize: 90%;
+			--imgpadding: 5%;
+		}
+
+		html, body {position:fixed;top:0;bottom:0;left:0;right:0;margin:0;padding:0;height:100%;width:100%}
+		body{background-color:var(--bgcolor);font-size:var(--fontsize);}
+
+		body canvas.canvas {position:fixed;top:0;left:0;z-index:-1;}
+
+		body div.copyright{}
+		body div.copyright > p {cursor:pointer;font:12px Arial, sans-serif;color:#888888AA;margin:0;padding:0;margin-left:1em;margin-top:0.5em;}
+		body div.copyright > div{display:none;position:fixed;z-index:1;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:#00000066;}
+		body div.copyright > div > div{font:12px Arial, sans-serif;position:absolute;left:50%;top:50%;height:65%;max-height:65%;transform:translate(-50%,-50%);background-color:#FEFEFE;border:2px solid #0086B3;border-top-width:2.5em;box-shadow:0 4px 8px 0 #00000033, 0 6px 20px 0 #00000033;border-radius:10px;}
+		body div.copyright > div > div h1{font-size:135%;font-weight:bold;margin:0;padding:0;margin-top:-1.2em;margin-left:0.5em;color:white;}
+		body div.copyright > div > div span{cursor:pointer;color:#CCCCCC;float:right;font-size:200%;font-weight:bold;margin-top:-1.3em;margin-right:0.25em;}
+		body div.copyright > div > div article{padding:2px 16px 16px 16px;display:flex;flex-direction:column;height:100%;}
+		body div.copyright > div > div article p:nth-of-type(1){font-size:115%}
+		body div.copyright > div > div article p:nth-of-type(2){text-align:right;}
+		body div.copyright > div > div article p:nth-of-type(3) a{margin-left:1.1em;}
+		body div.copyright > div > div article h2{font-size:125%;font-weight:bold;}
+		body div.copyright > div > div article pre{font:12px Courier, monospace;width:80ch;overflow:auto;flex-grow:1;}
+
+		svg{stroke:var(--color);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill:none;}
+
+		body div.buttons{position:fixed;width:calc(var(--btnsize) + 20px);}
+		button{display:inline-block;margin:5px 10px;padding:0;width:var(--btnsize);height:var(--btnsize);background:transparent;border:2px solid transparent;border-radius:50%;transition: border-color 0.2s,background-color 0.5s;}
+		button:hover{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);transition:border-color,box-shadow 0.2s,background-color 0.5s;}
+		button:active{background-color:var(--highlight);transition: background-color 0s;}
+		button svg{width:var(--imgsize);height:var(--imgsize);margin:calc(50% - var(--imgsize)/2);padding:0;display:block;}
+		/* These does not seem to work - continue to display hover and active despite being removed */
+		button:disabled:hover{border-color:transparent;box-shadow:none;};
+		button:disabled:active{border-color:transparent:none;background-color:transparent;}
+		button:disabled svg{stroke:#88888888;}
+
+/* Panels */
+		body div.panel{display:none;position:fixed;padding:0:margin:0;border:0;background-color:#CCCCCC44;border-radius:10px;white-space:nowrap;font:var(--fntsize) Arial, sans-serif;color:var(--color);}
+		body div.panel:after{content:"";position:absolute;background-color:inherit;border-radius:10px;}
+		body div.panel > button{display:none;margin-top:10px;margin-right:0;}
+		body div.panel button + button{margin-left:0;margin-right:10px;}
+		body div.panel > input[type=range]{display:none;padding-right:18px;height:calc(var(--btnsize) - 8px);}
+		body div.panel input[type=range]{-webkit-appearance:none;background:transparent;}
+		body div.panel input[type=range]:focus {outline:none;}
+		body div.panel input[type=range]::-webkit-slider-runnable-track{width:100%;height:10px;cursor:pointer;box-shadow:none;background:var(--highlight);border-radius:3px;border:0;}
+		body div.panel input[type=range]::-moz-range-track{width:100%;height:10px;cursor: pointer;box-shadow:none;background:var(--highlight);border-radius:3px;border:0;}
+		body div.panel input[type=range]::-ms-track{width:100%;height:10px;cursor:pointer;background:transparent;border-color:transparent;color:transparent;}
+		body div.panel input[type=range]::-ms-fill-lower, #sliderpanel input[type=range]::-ms-fill-upper{background:var(--highlight);border:0;border-radius:3px;box-shadow:none;}
+		body div.panel input[type=range]:focus::-ms-fill-lower, #sliderpanel input[type=range]:focus::-ms-fill-upper {background:var(--highlight);}
+		body div.panel input[type=range]::-webkit-slider-thumb{box-shadow:none;border:1px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;-webkit-appearance: none;margin-top:calc(var(--btnsize) * -0.25);}
+		body div.panel input[type=range]:focus::-webkit-slider-runnable-track {background:var(--highlight);}
+		body div.panel input[type=range]::-moz-range-thumb{box-shadow:none;border:1px solid var(--highlight);height:cacl(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;}
+		body div.panel input[type=range]::-ms-thumb{margin-top:1px;box-shadow:none;border:1px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background: var(--bgcolor);cursor: pointer;}
+		body div.panel > label {display:none;font-size:var(--fontsize);margin:10px;}
+		body div.panel > label input[type=number]{font-size:var(--fontsize);float:right;margin-top:-0.25ex;}
+		body div.panel > p{display:none;color:red;}
+
+		body div.panel.mod, body div.panel.fac, body div.panel.color{display:block;max-width:100%;}
+		body div.panel.mod > button.increment, body div.panel.mod > button.decrement,
+		body div.panel.fac > button.increment, body div.panel.fac > button.decrement,
+		body div.panel.color > button.increment, body div.panel.color > button.decrement{display:inline-block;}
+		body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{display:inline-block;}
+		body div.panel.mod:after, body div.panel.fac:after, body div.panel.color:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);border-top-left-radius:0;border-top-right-radius:0;top:100%;}
+		body div.panel.mod:after{left:calc(3*(var(--btnsize) + 10px));}
+		body div.panel.fac:after{left:calc(2*(var(--btnsize) + 10px));}
+		body div.panel.color:after{left:calc((var(--btnsize) + 10px));}
+
+		body div.panel.settings{display:block;width:7.5em;}
+		body div.panel.settings > label {display:block;}
+
+		body div.panel.animate{display:block;height:calc(var(--btnsize) + 10px);}
+		body div.panel.animate > button.slower,
+		body div.panel.animate > button.faster{display:inline-block;margin-top:5px;}
+		body div.panel.unimplemented > p{display:block;margin:10px;text-align:center;vertical-align:middle;}
+		body div.panel.unimplemented > p:before{content:"Unimplemented";font-family:Arial, sans-serif;font-weight:bold;}
+
+/* Info block */
+		body div.info{position:fixed;font:var(--fontsize) arial, sans-serif;color:var(--color);width:6em;top:18px;left:15px;}
+		body div.info dl{padding:5px;margin:0;}
+		body div.info dt{font-weight:bold;float:left;clear:left;min-width:2.25em;text-align:right;}
+		body div.info dt:after{content:":";}
+		body div.info dd{margin:0 0 0 2.75em;}
+		body div.info dd.delta{margin:0;background-color:var(--color);width:0%;height:4px;}
+
+
+
+/* Landscape */
+		@media all and (orientation: landscape) {
+			body div.buttons{bottom:5px;right:0;}
+
+			body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{width:65vh;}
+			body div.panel.mod > button, body div.panel.fac > button, body div.panel.color > button{transform:rotate(90deg);}
+			body div.panel.mod, body div.panel.fac, body div.panel.color{left:calc(100% - var(--btnsize) - 20px);bottom:5px;transform-origin:0% 100%;transform:rotate(270deg);}
+
+			body div.panel.settings{right:calc(var(--btnsize) + 20px);top:calc(100% - 8 * (var(--btnsize) + 10px) - 5px);border-top-right-radius:0;}
+			body div.panel.settings:after{width:calc(var(--btnsize) + 15px);height:calc(var(--btnsize) + 10px);top:0;right:calc(-15px - var(--btnsize));border-top-left-radius:0;border-bottom-left-radius:0;}
+
+			body div.panel.animate{right:calc(var(--btnsize) + 20px);top:calc(100% - 6 * (var(--btnsize) + 10px) - 5px);border-top-right-radius:0;border-bottom-right-radius:0;}
+			body div.panel.animate:after{width:calc(var(--btnsize) + 15px);height:calc(var(--btnsize) + 10px);top:0;right:calc(-15px - var(--btnsize));border-top-left-radius:0;border-bottom-left-radius:0;}
+		}
+
+/* Portrait */
+		@media all and (orientation: portrait) {
+			body div.buttons button{transform:rotate(270deg);}
+			body div.buttons{bottom:0;left:calc(-15px - var(--btnsize));transform-origin:100% 100%;transform: rotate(90deg);}
+
+			body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{width:65vw;}
+			body div.panel.mod, body div.panel.fac, body div.panel.color{left:5px;bottom:calc(var(--btnsize) + 20px);}
+
+			body div.panel.settings{right:calc(100% - (var(--btnsize) + 10px) * 8 - 5px);bottom:calc(var(--btnsize) + 20px);border-bottom-right-radius:0;}
+			body div.panel.settings:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);right:0;top:100%;border-top-left-radius:0;border-top-right-radius:0;}
+
+			body div.panel.animate{right:calc(100% - (var(--btnsize) + 10px) * 6 - 5px);bottom:calc(var(--btnsize) + 20px);border-bottom-right-radius:0;}
+			body div.panel.animate:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);right:0;top:100%;border-top-left-radius:0;border-top-right-radius:0;}
+		}
+
+/* Disable the hover ring on touch and move it to activate */
+		html.touch button:hover{border-color:transparent;box-shadow:none;}
+		html.touch button:active{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);}
+
+	</style>
+
+	<body>
+		<canvas class="canvas" width="100" height="100"></canvas>	
+
+		<div class="copyright">
+			<p></p>
+			<div>
+				<div>
+					<span>&times;</span>
+					<h1>About</h1>
+					<article>
+						<h2></h2>
+						<p></p>
+						<p></p>
+						<p>More information here:<br/><a href="https://en.wikipedia.org/wiki/Ring_theory">https://en.wikipedia.org/wiki/Ring_theory</a><br/><a href="https://en.wikipedia.org/wiki/Modular_arithmetic">https://en.wikipedia.org/wiki/Modular_arithmetic</a></p>
+						<h2>Licensing information</h2>
+						<pre></pre>
+					</article>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel">
+			<label>%<input class="mod" type="number" min="1" max="360" step="1"/></label>
+			<label>×<input class="fac" type="number" min="1" max="360" step="1"/></label>
+			<button class="decrement">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+			</button>
+			<button class="increment">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+			</button>
+			<input class="range" type="range" min="1" max="360" step="1"/>
+			<button class="slower">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+			</button>
+			<button class="faster">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+			</button>
+			<p></p>
+		</div>
+
+		<div class="info">
+			<dl>
+				<dd class="delta"></dd>
+				<dt>%</dt>
+				<dd class="mod">125</dd>
+				<dt>×</dt>
+				<dd class="fac">25</dd>
+			</dl>
+		</div>
+
+		<div class="buttons">
+			<button class="zoom">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+			</button>
+			<button class="settings">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+			</button>
+			<button class="info">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="8"/></svg>
+			</button>
+			<button class="animate">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+			</button>
+			<button class="theme">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+			</button>
+			<button class="mod">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+			</button>
+			<button class="fac">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+			</button>
+			<button class="color">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+			</button>
+			<button class="colormode">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M17.66,10C17.41,9.3 17.03,8.66 16.56,8.1L18.63,4.52C20.22,5.93 21.36,7.84 21.8,10Z"/><path d="M13.1,6.1C12.36,5.96 11.62,5.97 10.9,6.1L8.84,2.52C10.85,1.85 13.07,1.82 15.17,2.52Z"/><path d="M7.44,8.1C6.96,8.67 6.59,9.31 6.34,10L2.21,10C2.63,7.92 3.72,5.98 5.37,4.52Z"/><path d="M6.34,14C6.59,14.7 6.97,15.34 7.44,15.9L5.37,19.48C3.78,18.07 2.64,16.16 2.2,14Z"/><path d="M10.9,17.9C11.64,18.04 12.38,18.03 13.1,17.9L15.16,21.48C13.15,22.15 10.92,22.18 8.83,21.48Z"/><path d="M16.56,15.9C17.05,15.33 17.41,14.69 17.66,14L21.79,14C21.37,16.08 20.28,18.02 18.63,19.48Z"/></svg>
+			</button>
+		</div>
+	</body>
+
+	<script type="application/javascript">
+
+		(function() {
+
+/* Various helper functions */
+			(function() {
+				var isTouch = false;
+				var isTouchTimer;
+				var curRootClass = "";
+	
+				function addtouchclass(e) {
+					clearTimeout(isTouchTimer);
+					isTouch = true;
+					if(curRootClass != "touch") {
+						curRootClass = "touch";
+						document.documentElement.classList.add(curRootClass);
+					}
+					isTouchTimer = setTimeout(function(){isTouch = false;}, 500);
+				}
+
+				function removetouchclass(e) {
+					if(!isTouch && curRootClass == "touch") {
+						isTouch = false;
+						curRootClass = '';
+						document.documentElement.classList.remove("touch");
+					}
+				}
+
+				document.addEventListener('touchstart',addtouchclass,false);
+				document.addEventListener('mouseover',removetouchclass,false);
+			})();
+
+/* Default color values - these should be in the CSS... */
+			var themeDayColor			= "black";
+			var themeDayBackground		= "white";
+			var themeDayHighlight		= "DeepSkyBlue";
+			var themeNightColor			= "white";
+			var themeNightBackground	= "black";
+			var themeNightHighlight		= "OrangeRed";
+			var zoomInBtnSize			= "48px";
+			var zoomOutBtnSize			= "36px";
+
+/* Various default value */
+			var initMod = 200;
+			var initFac = 121;
+			var initColor = 23;
+			var initColormode = "dynamic";
+			var initTheme = "day";
+			var initZoom = false;
+			var initInfo = false;
+			var initAnimate = false;
+
+/* The Panels */
+			var panel = (function(){
+				function onRangeChange(rangeInputElmt, listener) {
+					var inputEvtHasNeverFired = true;
+					var rangeValue = {current: undefined, mostRecent: undefined};
+  
+					rangeInputElmt.addEventListener("input", function(evt) {
+						inputEvtHasNeverFired = false;
+						rangeValue.current = evt.target.value;
+						if (rangeValue.current !== rangeValue.mostRecent) listener(evt);
+						rangeValue.mostRecent = rangeValue.current;
+					});
+
+					rangeInputElmt.addEventListener("change", function(evt) {
+						if (inputEvtHasNeverFired) listener(evt);
+					});
+				}
+
+				function repeatButton(b, a, s, d) {
+					var t;
+
+					var repeat = function() {
+						 a();
+						 t = setTimeout(repeat, d);
+					};	
+
+					b.addEventListener("mousedown",function() { a(); t = setTimeout(repeat,s); });
+					b.addEventListener("mouseup",function() {clearTimeout(t);});
+					b.addEventListener("mouseout",function() {clearTimeout(t);});
+					/*
+					b.addEventListener("touchstart"
+					b.addEventlistener("touchend"
+					b.addEventListener("touchmove"
+					b.addEventListener("touchcancel",
+					*/
+				}
+
+				var panel;
+				var range;
+				var state = "";
+	
+				var mod = e => draw.mod = Number(e.target.value);
+
+				var fac = e => draw.fac = Number(e.target.value);
+
+				var change = e => {
+					var v = Number(e.target.value);
+					if(state == "mod") draw.mod = v;
+					else if(state == "fac") draw.fac = v;
+					else if(state == "color") draw.color = v;
+				};
+	
+				var send = () => {
+					var e = document.createEvent("Event");
+					e.initEvent("input", true, true);
+					range.dispatchEvent(e);
+				};
+	
+				var inc = e => {
+					range.stepUp(1);
+					send();
+				};
+				
+				var dec = e => {
+					range.stepDown(1);
+					send();
+				};
+
+				var slower = e => draw.slower();
+				
+				var faster = e => draw.faster();
+
+				var show = (s, f) => {
+					if(state) panel.classList.remove(state);
+					state = s == state || (f !== undefined && !f) ? "" : s;
+					if(state) panel.classList.add(state);
+					if(state == "animate") {
+					} else if(state == "settings") {
+						panel.querySelector("input[type=number].mod").value = draw.mod;
+						panel.querySelector("input[type=number].fac").value = draw.fac;
+					} else if(state == "mod") {
+						range.value = draw.mod;
+					} else if(state == "fac") {
+						range.value = draw.fac;
+					} else if(state == "color") {
+						range.value = draw.color;
+					}
+				};
+
+				show.init = (o, s) => {
+					panel = o;
+					o.querySelector("input[type=number].mod").addEventListener("input", mod);
+					o.querySelector("input[type=number].fac").addEventListener("input", fac);
+					range = o.querySelector("input[type=range]");
+					onRangeChange(range, change);
+					repeatButton(o.querySelector("button.increment"), inc, 750, 125);
+					repeatButton(o.querySelector("button.decrement"), dec, 750, 125);
+					repeatButton(o.querySelector("button.faster"), faster, 750, 125);
+					repeatButton(o.querySelector("button.slower"), slower, 750, 125);
+					show(s);
+				};
+	
+				return show;
+			})();
+
+/* Info block */
+			var info = (function(){
+				var p;
+				var pm;
+				var pf;
+				var pd;
+				var state;
+				
+				var mod = v => {
+					if(state) pm.innerText = v;
+				};
+					
+				var fac = v => {
+					if(state) pf.innerText = v;
+				};
+				
+				var delta = v => {
+					pd.style.width = ((v * 100) | 0) + "%";
+				};
+				
+				var show = s => {
+					if(s !== undefined) {
+						state = s;
+						p.style.display = state ? "block" : "none";
+						if(state && draw) {
+							mod(draw.mod);
+							fac(draw.fac);
+						}
+					}
+					return state;
+				};
+
+				show.init = (o, s) => {
+					p = o;
+					pm = o.querySelector(".mod");
+					pf = o.querySelector(".fac");
+					pd = o.querySelector(".delta");
+					show(s);
+				};
+
+				Object.defineProperty(show, "mod", {set:function(v) {mod(v);}});
+				Object.defineProperty(show, "fac", {set:function(v) {fac(v);}});
+				Object.defineProperty(show, "delta", {set:function(v) {delta(v);}});
+
+				return show;
+			})();
+
+/* The draw function */
+			var draw = (function(){
+				var h = 0;
+				
+				var canvas;
+				
+				var mod;
+				var fac;
+				var color;
+				var colormode;
+				var theme;
+				var animate;
+				var delta;
+				var ptime;
+				var animationrate = 0.00003;
+
+				var sin = Math.sin;
+				var cos = Math.cos;
+				var abs = Math.abs;
+				
+				var H2RGB = h => {
+					var x;
+					var r, g, b;
+					 h %= 360;
+					 x = 255 - 255*abs((h/60) % 2 - 1);
+					 if(h < 60)		  r = 255, g =	 x, b =	  0;
+					 else if(h < 120) r =	x, g = 255, b =	  0;
+					 else if(h < 180) r =	0, g = 255, b =	  x;
+					 else if(h < 240) r =	0, g =	 x, b = 255;
+					 else if(h < 300) r =	x, g =	 0, b = 255;
+					 else			  r = 255, g =	 0, b =	  x;
+					 return "rgb(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + ")";
+				};
+				
+				const PI2 = 2 * Math.PI;
+				const PIN_MARGIN = 10;
+				const PIN_RADIUS = 4;
+
+				var draw = time => {
+					var w = canvas.width;
+					var c = canvas.getContext("2d");
+					var w2 = w/2;
+					var d = PI2/mod;
+
+					if(animate) {
+						if(ptime) {
+							delta = animationrate * (time - ptime) + delta;
+							if(delta > 1) {
+								fac += (delta | 0);
+								if(fac > 360) fac = 1;
+								delta = delta % 1;
+								info.fac = fac;
+							}
+							info.delta = delta;
+						} else {
+							delta = 0;
+							info.delta = delta;
+						}
+						ptime = time;
+					}
+
+					c.clearRect(0, 0, w, w);
+					c.lineWidth = 1;
+					if(colormode != "cycle") c.beginPath();
+					for(var i = mod - 1; i >= 0; i--) {
+						var a = i * d;
+						if(colormode == "cycle") c.beginPath(); // Optimize with secondary loop (moving if outside loop)
+						c.moveTo(w2 + (w2 - PIN_MARGIN) * cos(a), w2 + (w2 - PIN_MARGIN) * sin(a));
+						a = (((i * (fac + delta)) % mod) | 0) * d;
+						c.lineTo(w2 + (w2 - PIN_MARGIN) * cos(a), w2 + (w2 - PIN_MARGIN) * sin(a));
+						if(colormode == "cycle") {
+							c.strokeStyle = H2RGB(color + mod - i, 1, 1);
+							c.stroke();
+						}
+					}
+					if(colormode != "cycle") {
+						c.strokeStyle = H2RGB(color + (colormode == "dynamic" ? (mod + fac) : 0), 1, 1);
+						c.stroke();
+					}
+					c.beginPath();
+					for(var i = mod - 1; i >= 0; i--) {
+						var a = i * d;
+						var ox = w2 + (w2 - PIN_MARGIN) * cos(a);
+						var oy = w2 + (w2 - PIN_MARGIN) * sin(a);
+						c.moveTo(ox + PIN_RADIUS, oy);
+						c.arc(ox, oy, PIN_RADIUS, 0, PI2);
+					}
+					c.strokeStyle = c.fillStyle = theme == "day" && "#000000" || "#FFFFFF";
+					c.lineWidth = 1;
+					c.stroke();
+					h = animate ? window.requestAnimationFrame(draw) : 0;
+				};
+				
+				var resize = e => {
+					var w = document.documentElement.clientWidth;
+					var h = document.documentElement.clientHeight;
+					w = w > h ? h : w;
+					if(w != canvas.offsetWidth) {
+						canvas.style.width = w + "px";
+						canvas.style.height = w + "px";
+					} if(w != canvas.width) {
+						canvas.width = w;
+						canvas.height = w;
+						redraw();
+					}
+				};
+				
+				var redraw = () => {
+					if(!h) h = window.requestAnimationFrame(draw);
+				};
+
+				redraw.init = (o, m, f, c, x, t, a) => {
+					canvas = o;
+					mod = m;
+					fac = f;
+					color = c;
+					colormode = x;
+					theme = t;
+					animate = a;
+					window.addEventListener("resize", resize);
+					resize();
+				};
+				
+				redraw.faster = () => animationrate *= 2;
+				
+				redraw.slower = () => animationrate /= 2;
+				
+				Object.defineProperty(redraw, "animate", {
+					get: function() {
+						return animate;
+					},
+					set: function(v) {
+						animate = v ? true : false;
+						if(animate) {
+							ptime = undefined;
+						} else {
+							delta = 0;
+							info.delta = delta;
+						}
+						redraw();
+					}
+				});
+
+				Object.defineProperty(redraw, "mod", {
+					get: function() {
+						return mod;
+					},
+					set: function(v) {
+						var t = mod;
+						if(v < 1 || v > 360) return;
+						mod = v;
+						if(v != t) {
+							info.mod = v;
+							redraw();
+						}
+					}
+				});
+				
+				Object.defineProperty(redraw, "fac", {
+					get: function() {
+						return fac;
+					},
+					set: function(v) {
+						var t = fac;
+						if(v < 1 || v > 360) return;
+						fac = v;
+						if(v != t) {
+							info.fac = v;
+							redraw();
+						}
+					}
+				});
+				
+				Object.defineProperty(redraw, "color", {
+					get: function() {
+						return color;
+					},
+					set: function(v) {
+						var t = color;
+						if(v < 1 || v > 360) return;
+						color = v;
+						if(v != t) redraw();
+					}
+				});
+				
+				Object.defineProperty(redraw, "colormode", {
+					get: function() {
+						return colormode;
+					},
+					set: function(v) {
+						var t = colormode;
+						if(v != "flat" && v != "dynamic" && v != "cycle") return;
+						colormode = v;
+						if(v != t) redraw();
+					}
+				});
+				
+				Object.defineProperty(redraw, "theme", {
+					get: function() {
+						return theme;
+					},
+					set: function(v) {
+						var t = theme;
+						if(v != "day" && v != "night") return;
+						theme = v;
+						if(v != t) redraw();
+					}
+				});
+
+				return redraw;
+			})();
+
+/* Buttons */
+			var buttons = (function(){
+				var zoom = (function(){
+					var state;
+					
+					var zoom = (o, p) => {
+						var c = o.children;
+						state = p;
+						c[0].style.display = state ? "none" : "block";
+						c[1].style.display = state ? "block" : "none";
+						document.body.style.setProperty("--btnsize", state ? zoomInBtnSize : zoomOutBtnSize);
+					};
+					
+					var click = e => zoom(e.currentTarget, !state);
+					
+					return o => {
+						zoom(o, false);
+						o.addEventListener("click", click);
+					};
+					
+				})();
+
+				var settings = (function(){
+					var b;
+					
+					var click = e => panel("settings");
+					
+					var init = o => {
+						b = o;
+						o.addEventListener("click", click);
+					};
+
+					Object.defineProperty(init, "disabled", {
+						set:function(f) { b.disabled = f; }
+					});
+
+					return init;
+				})();
+
+				var stats = (function(){
+					var click = e => info(!info());
+					
+					return o => o.addEventListener("click", click);
+					
+				})();
+				
+				var animate = (function(){
+					var animate = (o, p) => {
+						var c = o.children;
+						draw.animate = p;
+						c[0].style.display = draw.animate ? "block" : "none";
+						c[1].style.display = draw.animate ? "none" : "block";
+						settings.disabled = draw.animate;
+						mod.disabled = draw.animate;
+						fac.disabled = draw.animate;
+						color.disabled = draw.animate;
+						panel("animate", draw.animate);
+					};
+					
+					var click = e => animate(e.currentTarget, !draw.animate);
+					
+					return o => {
+						animate(o, draw.animate);
+						o.addEventListener("click", click);
+					};
+					
+				})();
+				
+				var theme = (function(){
+					var theme = (o, p) => {
+						var c = o.children;
+						draw.theme = p;
+						c[0].style.display = draw.theme == "day" ? "block" : "none";
+						c[1].style.display = draw.theme == "day" ? "none" : "block";
+						document.body.style.setProperty("--bgcolor", draw.theme == "day" ? themeDayBackground : themeNightBackground);
+						document.body.style.setProperty("--color", draw.theme == "day" ? themeDayColor : themeNightColor);
+						document.body.style.setProperty("--highlight", draw.theme == "day" ? themeDayHighlight : themeNightHighlight);
+					};
+
+					var click = e => theme(e.currentTarget, draw.theme == "day" ? "night" : "day");
+
+					return o => {
+						theme(o, draw.theme);
+						o.addEventListener("click", click);
+					};
+
+				})();
+				
+				var mod = (function(){
+					var b;
+					
+					var click = e => panel("mod");
+					
+					var init = o => {
+						b = o;
+						o.addEventListener("click", click);
+					};
+					
+					Object.defineProperty(init, "disabled", {
+						set:function(f) { b.disabled = f; }
+					});
+					
+					return init;
+				})();
+				
+				var fac = (function(){
+					var b;
+					
+					var click = e => panel("fac");
+					
+					var init = o => {
+						b = o;
+						o.addEventListener("click", click);
+					};
+					
+					Object.defineProperty(init, "disabled", {
+						set:function(f) { b.disabled = f; }
+					});
+					
+					return init;
+				})();
+				
+				var color = (function(){
+					var b;
+					
+					var click = e => panel("color");
+					
+					var init = o => {
+						b = o;
+						o.addEventListener("click", click);
+					};
+					
+					Object.defineProperty(init, "disabled", {
+						set:function(f) { b.disabled = f; }
+					});
+					
+					return init;
+				})();
+
+				var colormode = (function(){
+					var colormode = (o, p) => {
+						var c = o.children;
+						draw.colormode = p;
+						c[0].style.display = draw.colormode == "flat" ? "block" : "none";
+						c[1].style.display = draw.colormode == "dynamic" ? "block" : "none";
+						c[2].style.display = draw.colormode == "cycle" ? "block" : "none";
+					};
+					
+					var click = e => colormode(e.currentTarget, draw.colormode == "flat" ? "dynamic" : draw.colormode == "dynamic" ? "cycle" : "flat");
+					
+					return o => {
+						colormode(o, draw.colormode);
+						o.addEventListener("click", click);
+					};
+					
+				})();
+			
+				return o => {
+					zoom(o.querySelector("button.zoom"));
+					settings(o.querySelector("button.settings"));
+					stats(o.querySelector("button.info"));
+					theme(o.querySelector("button.theme"));
+					mod(o.querySelector("button.mod"));
+					fac(o.querySelector("button.fac"));
+					color(o.querySelector("button.color"));
+					colormode(o.querySelector("button.colormode"));
+					animate(o.querySelector("button.animate"));
+				};
+				
+			})();
+
+/* Copyright and license */
+			var copyright = (function() {
+				var dialog;
+				
+				var dismiss = () => dialog.style.display = "none";
+				
+				var show = () => dialog.style.display = "block";
+
+				var init = (o, d) => {
+					o.innerText = document.querySelector("head meta[name=copyright]").getAttribute("content");
+					d.querySelector("div article > h2").innerText = document.head.querySelector("meta[name=application-name]").getAttribute("content");
+					d.querySelector("div article p:nth-of-type(1)").innerText = document.head.querySelector("meta[name=description]").getAttribute("content");
+					d.querySelector("div article p:nth-of-type(2)").innerText = document.head.querySelector("meta[name=copyright]").getAttribute("content");
+					d.querySelector("div article pre").innerText = document.head.querySelector("script.license").innerText;
+					d.querySelector("div > span").addEventListener("click", dismiss);
+					o.addEventListener("click", show);
+					dialog = d;
+				};
+
+				return init;
+			})();
+
+/* Initialize and set defaults */
+			panel.init(document.querySelector("body div.panel"), "");
+			copyright(document.querySelector("body div.copyright > p"), document.querySelector("body div.copyright > div"));
+			info.init(document.querySelector("body div.info"), initInfo);
+			draw.init(document.querySelector("body canvas.canvas"), initMod, initFac, initColor, initColormode, initTheme, initAnimate);
+			buttons(document.querySelector("body div.buttons"));
+
+		})();
+	</script>
+
+</html>
