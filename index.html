@@ -71,15 +71,15 @@ SOFTWARE.
 				--themeNightHighlight
 			*/
 
-			/*	Variables used in the CSS */
+			/* Variables used in the CSS */
 			/*
-				--color: black; 
+				--color: black;
 				--bgcolor: white;
 				--highlight: Green;
 				--highlightdark: #B33000;
 				--patchpos: 51px;
 				--btnsize: 36px;
-
+	
 			*/
 				--fontsize:calc(var(--btnsize)/2);
 				--imgsize: 90%;
@@ -114,7 +114,7 @@ SOFTWARE.
 			button svg{width:var(--imgsize);height:var(--imgsize);margin:calc(50% - var(--imgsize)/2);padding:0;display:block;}
 			/* These does not seem to work - continue to display hover and active despite being removed */
 			button:disabled:hover{border-color:transparent;box-shadow:none;};
-			button:disabled:active{border-color:transparent:none;background-color:transparent;}
+			button:disabled:active{border-color:transparent;box-shadow:none;background-color:transparent;}
 			button:disabled svg{stroke:rgba(136,136,136,0.53);}
 
 /* Panels */
@@ -136,7 +136,7 @@ SOFTWARE.
 			body div.panel input[type=range]::-moz-range-thumb{box-shadow:none;border:2px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;}
 			body div.panel input[type=range]::-ms-thumb{margin-top:1px;box-shadow:none;border:2px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background: var(--bgcolor);cursor: pointer;}
 			body div.panel > label {display:none;font-size:var(--fontsize);margin:10px;text-align:right;}
-			body div.panel > label input[type=number]{dsiplay:inline-block;font-size:var(--fontsize);margin-top:-0.25ex;width:3em;margin-left:2em;text-align:right;}
+			body div.panel > label input[type=number]{font-size:var(--fontsize);margin-top:-0.25ex;width:3em;margin-left:2em;text-align:right;}
 			body div.panel > p{display:none;color:red;}
 
 			body div.panel.mod, body div.panel.fac, body div.panel.color{display:block;max-width:100%;}
@@ -164,6 +164,7 @@ SOFTWARE.
 			body div.info dt{font-weight:bold;float:left;clear:left;min-width:2.25em;text-align:right;}
 			body div.info dt:after{content:":";}
 			body div.info dd{margin:0 0 0 2.75em;}
+			body div.info dl dt:first-child{display:none;}
 			body div.info dd.delta{margin:0;background-color:var(--color);width:0%;height:4px;}
 
 /* Landscape */
@@ -202,13 +203,13 @@ SOFTWARE.
 		</style>
 	</head>
 	<body>
-		<canvas class="canvas" width="100" height="100"></canvas>	
+		<canvas class="canvas" width="100" height="100"></canvas>
 
 		<div class="copyright">
 			<p></p>
 			<div>
 				<div>
-					<span>×</span>
+					<span>&times;</span>
 					<h1>About</h1>
 					<article>
 						<h2></h2>
@@ -243,6 +244,7 @@ SOFTWARE.
 
 		<div class="info">
 			<dl>
+				<dt></dt>
 				<dd class="delta"></dd>
 				<dt>%</dt>
 				<dd class="mod">125</dd>
@@ -285,628 +287,628 @@ SOFTWARE.
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M17.66,10C17.41,9.3 17.03,8.66 16.56,8.1L18.63,4.52C20.22,5.93 21.36,7.84 21.8,10Z"/><path d="M13.1,6.1C12.36,5.96 11.62,5.97 10.9,6.1L8.84,2.52C10.85,1.85 13.07,1.82 15.17,2.52Z"/><path d="M7.44,8.1C6.96,8.67 6.59,9.31 6.34,10L2.21,10C2.63,7.92 3.72,5.98 5.37,4.52Z"/><path d="M6.34,14C6.59,14.7 6.97,15.34 7.44,15.9L5.37,19.48C3.78,18.07 2.64,16.16 2.2,14Z"/><path d="M10.9,17.9C11.64,18.04 12.38,18.03 13.1,17.9L15.16,21.48C13.15,22.15 10.92,22.18 8.83,21.48Z"/><path d="M16.56,15.9C17.05,15.33 17.41,14.69 17.66,14L21.79,14C21.37,16.08 20.28,18.02 18.63,19.48Z"/></svg>
 			</button>
 		</div>
-	</body>
 
-	<script type="application/javascript">
+		<script type="application/javascript">
 
-		(function() {
-
-/* Various helper functions */
 			(function() {
-				var isTouch = false;
-				var isTouchTimer;
-				var curRootClass = "";
 
-				function addtouchclass(e) {
-					clearTimeout(isTouchTimer);
-					isTouch = true;
-					if(curRootClass != "touch") {
-						curRootClass = "touch";
-						document.documentElement.classList.add(curRootClass);
+	/* Various helper functions */
+				(function() {
+					var isTouch = false;
+					var isTouchTimer;
+					var curRootClass = "";
+
+					function addtouchclass(e) {
+						clearTimeout(isTouchTimer);
+						isTouch = true;
+						if(curRootClass != "touch") {
+							curRootClass = "touch";
+							document.documentElement.classList.add(curRootClass);
+						}
+						isTouchTimer = setTimeout(function(){isTouch = false;}, 500);
 					}
-					isTouchTimer = setTimeout(function(){isTouch = false;}, 500);
-				}
 
-				function removetouchclass(e) {
-					if(!isTouch && curRootClass == "touch") {
-						isTouch = false;
-						curRootClass = '';
-						document.documentElement.classList.remove("touch");
-					}
-				}
-
-				document.addEventListener('touchstart',addtouchclass,false);
-				document.addEventListener('mouseover',removetouchclass,false);
-			})();
-
-/* Default color values - these should be in the CSS... */
-			var themeDayColor		= "black";
-			var themeDayBackground		= "white";
-			var themeDayHighlight		= "DeepSkyBlue";
-			var themeDayHighlightDark	= "#0086B3";
-			var themeNightColor		= "white";
-			var themeNightBackground	= "black";
-			var themeNightHighlight		= "OrangeRed";
-			var themeNightHighlightDark	= "#B33000";
-			var zoomInBtnSize		= "48px";
-			var zoomOutBtnSize		= "36px";
-
-/* Various default value */
-			var initMod = 200;
-			var initFac = 121;
-			var initColor = 23;
-			var initColormode = "dynamic";
-			var initTheme = "day";
-			var initZoom = false;
-			var initInfo = false;
-			var initAnimate = false;
-
-/* The Panels */
-			var panel = (function(){
-				function onRangeChange(rangeInputElmt, listener) {
-					var inputEvtHasNeverFired = true;
-					var rangeValue = {current: undefined, mostRecent: undefined};
-  
-					rangeInputElmt.addEventListener("input", function(evt) {
-						inputEvtHasNeverFired = false;
-						rangeValue.current = evt.target.value;
-						if (rangeValue.current !== rangeValue.mostRecent) listener(evt);
-						rangeValue.mostRecent = rangeValue.current;
-					});
-
-					rangeInputElmt.addEventListener("change", function(evt) {
-						if (inputEvtHasNeverFired) listener(evt);
-					});
-				}
-
-				function repeatButton(b, a, s, d) {
-					var t;
-
-					var repeat = function() {
-						 a();
-						 t = setTimeout(repeat, d);
-					};	
-
-					b.addEventListener("mousedown",function() { a(); t = setTimeout(repeat,s); });
-					b.addEventListener("mouseup",function() {clearTimeout(t);});
-					b.addEventListener("mouseout",function() {clearTimeout(t);});
-					/*
-					b.addEventListener("touchstart"
-					b.addEventlistener("touchend"
-					b.addEventListener("touchmove"
-					b.addEventListener("touchcancel",
-					*/
-				}
-
-				var panel;
-				var range;
-				var state = "";
-
-				var mod = e => draw.mod = Number(e.target.value);
-
-				var fac = e => draw.fac = Number(e.target.value);
-
-				var change = e => {
-					var v = Number(e.target.value);
-					if(state == "mod") draw.mod = v;
-					else if(state == "fac") draw.fac = v;
-					else if(state == "color") draw.color = v;
-				};
-
-				var send = () => {
-					var e = document.createEvent("Event");
-					e.initEvent("input", true, true);
-					range.dispatchEvent(e);
-				};
-
-				var inc = e => {
-					range.stepUp(1);
-					send();
-				};
-
-				var dec = e => {
-					range.stepDown(1);
-					send();
-				};
-
-				var slower = e => draw.slower();
-
-				var faster = e => draw.faster();
-
-				var show = (s, f) => {
-					if(state) panel.classList.remove(state);
-					state = s == state || (f !== undefined && !f) ? "" : s;
-					if(state) panel.classList.add(state);
-					if(state == "animate") {
-					} else if(state == "settings") {
-						panel.querySelector("input[type=number].mod").value = draw.mod;
-						panel.querySelector("input[type=number].fac").value = draw.fac;
-					} else if(state == "mod") {
-						range.value = draw.mod;
-					} else if(state == "fac") {
-						range.value = draw.fac;
-					} else if(state == "color") {
-						range.value = draw.color;
-					}
-				};
-
-				show.init = (o, s) => {
-					panel = o;
-					o.querySelector("input[type=number].mod").addEventListener("input", mod);
-					o.querySelector("input[type=number].fac").addEventListener("input", fac);
-					range = o.querySelector("input[type=range]");
-					onRangeChange(range, change);
-					repeatButton(o.querySelector("button.increment"), inc, 750, 125);
-					repeatButton(o.querySelector("button.decrement"), dec, 750, 125);
-					repeatButton(o.querySelector("button.faster"), faster, 750, 125);
-					repeatButton(o.querySelector("button.slower"), slower, 750, 125);
-					show(s);
-				};
-
-				return show;
-			})();
-
-/* Info block */
-			var info = (function(){
-				var p;
-				var pm;
-				var pf;
-				var pd;
-				var state;
-
-				var mod = v => {
-					if(state) pm.innerText = v;
-				};
-
-				var fac = v => {
-					if(state) pf.innerText = v;
-				};
-
-				var delta = v => {
-					pd.style.width = ((v * 100) | 0) + "%";
-				};
-
-				var show = s => {
-					if(s !== undefined) {
-						state = s;
-						p.style.display = state ? "block" : "none";
-						if(state && draw) {
-							mod(draw.mod);
-							fac(draw.fac);
+					function removetouchclass(e) {
+						if(!isTouch && curRootClass == "touch") {
+							isTouch = false;
+							curRootClass = '';
+							document.documentElement.classList.remove("touch");
 						}
 					}
-					return state;
-				};
 
-				show.init = (o, s) => {
-					p = o;
-					pm = o.querySelector(".mod");
-					pf = o.querySelector(".fac");
-					pd = o.querySelector(".delta");
-					show(s);
-				};
+					document.addEventListener('touchstart',addtouchclass,false);
+					document.addEventListener('mouseover',removetouchclass,false);
+				})();
 
-				Object.defineProperty(show, "mod", {set:function(v) {mod(v);}});
-				Object.defineProperty(show, "fac", {set:function(v) {fac(v);}});
-				Object.defineProperty(show, "delta", {set:function(v) {delta(v);}});
+	/* Default color values - these should be in the CSS... */
+				var themeDayColor           = "black";
+				var themeDayBackground      = "white";
+				var themeDayHighlight       = "DeepSkyBlue";
+				var themeDayHighlightDark   = "#0086B3";
+				var themeNightColor         = "white";
+				var themeNightBackground    = "black";
+				var themeNightHighlight     = "OrangeRed";
+				var themeNightHighlightDark = "#B33000";
+				var zoomInBtnSize           = "48px";
+				var zoomOutBtnSize          = "36px";
 
-				return show;
-			})();
+	/* Various default value */
+				var initMod = 200;
+				var initFac = 121;
+				var initColor = 23;
+				var initColormode = "dynamic";
+				var initTheme = "day";
+				var initZoom = false;
+				var initInfo = false;
+				var initAnimate = false;
 
-/* The draw function */
-			var draw = (function(){
-				var h = 0;
+	/* The Panels */
+				var panel = (function(){
+					function onRangeChange(rangeInputElmt, listener) {
+						var inputEvtHasNeverFired = true;
+						var rangeValue = {current: undefined, mostRecent: undefined};
 
-				var canvas;
+						rangeInputElmt.addEventListener("input", function(evt) {
+							inputEvtHasNeverFired = false;
+							rangeValue.current = evt.target.value;
+							if (rangeValue.current !== rangeValue.mostRecent) listener(evt);
+							rangeValue.mostRecent = rangeValue.current;
+						});
 
-				var mod;
-				var fac;
-				var color;
-				var colormode;
-				var theme;
-				var animate;
-				var delta;
-				var ptime;
-				var animationrate = 0.00003;
+						rangeInputElmt.addEventListener("change", function(evt) {
+							if (inputEvtHasNeverFired) listener(evt);
+						});
+					}
 
-				var sin = Math.sin;
-				var cos = Math.cos;
-				var abs = Math.abs;
+					function repeatButton(b, a, s, d) {
+						var t;
 
-				var H2RGB = h => {
-					var x;
-					var r, g, b;
-					 h %= 360;
-					 x = 255 - 255*abs((h/60) % 2 - 1);
-					 if(h < 60)       r = 255, g =	 x, b =	  0;
-					 else if(h < 120) r =	x, g = 255, b =	  0;
-					 else if(h < 180) r =	0, g = 255, b =	  x;
-					 else if(h < 240) r =	0, g =	 x, b = 255;
-					 else if(h < 300) r =	x, g =	 0, b = 255;
-					 else             r = 255, g =	 0, b =	  x;
-					 return "rgb(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + ")";
-				};
+						var repeat = function() {
+							 a();
+							 t = setTimeout(repeat, d);
+						};
 
-				const PI2 = 2 * Math.PI;
-				const PIN_MARGIN = 10;
-				const PIN_RADIUS = 4;
+						b.addEventListener("mousedown",function() { a(); t = setTimeout(repeat,s); });
+						b.addEventListener("mouseup",function() {clearTimeout(t);});
+						b.addEventListener("mouseout",function() {clearTimeout(t);});
+						/*
+						b.addEventListener("touchstart"
+						b.addEventlistener("touchend"
+						b.addEventListener("touchmove"
+						b.addEventListener("touchcancel",
+						*/
+					}
 
-				var draw = time => {
-					var w = canvas.width;
-					var c = canvas.getContext("2d");
-					var w2 = w/2;
-					var d = PI2/mod;
+					var panel;
+					var range;
+					var state = "";
 
-					if(animate) {
-						if(ptime) {
-							delta = animationrate * (time - ptime) + delta;
-							if(delta > 1) {
-								fac += (delta | 0);
-								if(fac > 360) fac = 1;
-								delta = delta % 1;
-								info.fac = fac;
-							}
-							info.delta = delta;
-						} else {
-							delta = 0;
-							info.delta = delta;
+					var mod = e => draw.mod = Number(e.target.value);
+
+					var fac = e => draw.fac = Number(e.target.value);
+
+					var change = e => {
+						var v = Number(e.target.value);
+						if(state == "mod") draw.mod = v;
+						else if(state == "fac") draw.fac = v;
+						else if(state == "color") draw.color = v;
+					};
+
+					var send = () => {
+						var e = document.createEvent("Event");
+						e.initEvent("input", true, true);
+						range.dispatchEvent(e);
+					};
+
+					var inc = e => {
+						range.stepUp(1);
+						send();
+					};
+
+					var dec = e => {
+						range.stepDown(1);
+						send();
+					};
+
+					var slower = e => draw.slower();
+
+					var faster = e => draw.faster();
+
+					var show = (s, f) => {
+						if(state) panel.classList.remove(state);
+						state = s == state || (f !== undefined && !f) ? "" : s;
+						if(state) panel.classList.add(state);
+						if(state == "animate") {
+						} else if(state == "settings") {
+							panel.querySelector("input[type=number].mod").value = draw.mod;
+							panel.querySelector("input[type=number].fac").value = draw.fac;
+						} else if(state == "mod") {
+							range.value = draw.mod;
+						} else if(state == "fac") {
+							range.value = draw.fac;
+						} else if(state == "color") {
+							range.value = draw.color;
 						}
-						ptime = time;
-					}
+					};
 
-					c.clearRect(0, 0, w, w);
-					c.lineWidth = 1;
-					if(colormode != "cycle") c.beginPath();
-					for(var i = mod - 1; i >= 0; i--) {
-						var a = i * d;
-						if(colormode == "cycle") c.beginPath(); // Optimize with secondary loop (moving if outside loop)
-						c.moveTo(w2 + (w2 - PIN_MARGIN) * cos(a), w2 + (w2 - PIN_MARGIN) * sin(a));
-						a = (((i * (fac + delta)) % mod) | 0) * d;
-						c.lineTo(w2 + (w2 - PIN_MARGIN) * cos(a), w2 + (w2 - PIN_MARGIN) * sin(a));
-						if(colormode == "cycle") {
-							c.strokeStyle = H2RGB(color + mod - i, 1, 1);
-							c.stroke();
-						}
-					}
-					if(colormode != "cycle") {
-						c.strokeStyle = H2RGB(color + (colormode == "dynamic" ? (mod + fac) : 0), 1, 1);
-						c.stroke();
-					}
-					c.beginPath();
-					for(var i = mod - 1; i >= 0; i--) {
-						var a = i * d;
-						var ox = w2 + (w2 - PIN_MARGIN) * cos(a);
-						var oy = w2 + (w2 - PIN_MARGIN) * sin(a);
-						c.moveTo(ox + PIN_RADIUS, oy);
-						c.arc(ox, oy, PIN_RADIUS, 0, PI2);
-					}
-					c.strokeStyle = c.fillStyle = theme == "day" && "#000000" || "#FFFFFF";
-					c.lineWidth = 1;
-					c.stroke();
-					h = animate ? window.requestAnimationFrame(draw) : 0;
-				};
+					show.init = (o, s) => {
+						panel = o;
+						o.querySelector("input[type=number].mod").addEventListener("input", mod);
+						o.querySelector("input[type=number].fac").addEventListener("input", fac);
+						range = o.querySelector("input[type=range]");
+						onRangeChange(range, change);
+						repeatButton(o.querySelector("button.increment"), inc, 750, 125);
+						repeatButton(o.querySelector("button.decrement"), dec, 750, 125);
+						repeatButton(o.querySelector("button.faster"), faster, 750, 125);
+						repeatButton(o.querySelector("button.slower"), slower, 750, 125);
+						show(s);
+					};
 
-				var resize = e => {
-					var w = document.documentElement.clientWidth;
-					var h = document.documentElement.clientHeight;
-					w = w > h ? h : w;
-					if(w != canvas.offsetWidth) {
-						canvas.style.width = w + "px";
-						canvas.style.height = w + "px";
-					} if(w != canvas.width) {
-						canvas.width = w;
-						canvas.height = w;
-						redraw();
-					}
-				};
+					return show;
+				})();
 
-				var redraw = () => {
-					if(!h) h = window.requestAnimationFrame(draw);
-				};
-
-				redraw.init = (o, m, f, c, x, t, a) => {
-					canvas = o;
-					mod = m;
-					fac = f;
-					color = c;
-					colormode = x;
-					theme = t;
-					animate = a;
-					window.addEventListener("resize", resize);
-					resize();
-				};
-
-				redraw.faster = () => animationrate *= 2;
-
-				redraw.slower = () => animationrate /= 2;
-
-				Object.defineProperty(redraw, "animate", {
-					get: function() {
-						return animate;
-					},
-					set: function(v) {
-						animate = v ? true : false;
-						if(animate) {
-							ptime = undefined;
-						} else {
-							delta = 0;
-							info.delta = delta;
-						}
-						redraw();
-					}
-				});
-
-				Object.defineProperty(redraw, "mod", {
-					get: function() {
-						return mod;
-					},
-					set: function(v) {
-						var t = mod;
-						if(v < 1 || v > 360) return;
-						mod = v;
-						if(v != t) {
-							info.mod = v;
-							redraw();
-						}
-					}
-				});
-
-				Object.defineProperty(redraw, "fac", {
-					get: function() {
-						return fac;
-					},
-					set: function(v) {
-						var t = fac;
-						if(v < 1 || v > 360) return;
-						fac = v;
-						if(v != t) {
-							info.fac = v;
-							redraw();
-						}
-					}
-				});
-
-				Object.defineProperty(redraw, "color", {
-					get: function() {
-						return color;
-					},
-					set: function(v) {
-						var t = color;
-						if(v < 1 || v > 360) return;
-						color = v;
-						if(v != t) redraw();
-					}
-				});
-
-				Object.defineProperty(redraw, "colormode", {
-					get: function() {
-						return colormode;
-					},
-					set: function(v) {
-						var t = colormode;
-						if(v != "flat" && v != "dynamic" && v != "cycle") return;
-						colormode = v;
-						if(v != t) redraw();
-					}
-				});
-
-				Object.defineProperty(redraw, "theme", {
-					get: function() {
-						return theme;
-					},
-					set: function(v) {
-						var t = theme;
-						if(v != "day" && v != "night") return;
-						theme = v;
-						if(v != t) redraw();
-					}
-				});
-
-				return redraw;
-			})();
-
-/* Buttons */
-			var buttons = (function(){
-				var zoom = (function(){
+	/* Info block */
+				var info = (function(){
+					var p;
+					var pm;
+					var pf;
+					var pd;
 					var state;
 
-					var zoom = (o, p) => {
-						var c = o.children;
-						state = p;
-						c[0].style.display = state ? "none" : "block";
-						c[1].style.display = state ? "block" : "none";
-						document.body.style.setProperty("--btnsize", state ? zoomInBtnSize : zoomOutBtnSize);
+					var mod = v => {
+						if(state) pm.innerText = v;
+					};
+	
+					var fac = v => {
+						if(state) pf.innerText = v;
 					};
 
-					var click = e => zoom(e.currentTarget, !state);
-
-					return o => {
-						zoom(o, false);
-						o.addEventListener("click", click);
+					var delta = v => {
+						pd.style.width = ((v * 100) | 0) + "%";
 					};
 
+					var show = s => {
+						if(s !== undefined) {
+							state = s;
+							p.style.display = state ? "block" : "none";
+							if(state && draw) {
+								mod(draw.mod);
+								fac(draw.fac);
+							}
+						}
+						return state;
+					};
+
+					show.init = (o, s) => {
+						p = o;
+						pm = o.querySelector(".mod");
+						pf = o.querySelector(".fac");
+						pd = o.querySelector(".delta");
+						show(s);
+					};
+
+					Object.defineProperty(show, "mod", {set:function(v) {mod(v);}});
+					Object.defineProperty(show, "fac", {set:function(v) {fac(v);}});
+					Object.defineProperty(show, "delta", {set:function(v) {delta(v);}});
+
+					return show;
 				})();
 
-				var settings = (function(){
-					var b;
+	/* The draw function */
+				var draw = (function(){
+					var h = 0;
+	
+					var canvas;
+	
+					var mod;
+					var fac;
+					var color;
+					var colormode;
+					var theme;
+					var animate;
+					var delta;
+					var ptime;
+					var animationrate = 0.00003;
 
-					var click = e => panel("settings");
+					var sin = Math.sin;
+					var cos = Math.cos;
+					var abs = Math.abs;
+	
+					var H2RGB = h => {
+						var x;
+						var r, g, b;
+						 h %= 360;
+						 x = 255 - 255*abs((h/60) % 2 - 1);
+						 if(h < 60)       r = 255, g =   x, b =   0;
+						 else if(h < 120) r =   x, g = 255, b =   0;
+						 else if(h < 180) r =   0, g = 255, b =   x;
+						 else if(h < 240) r =   0, g =   x, b = 255;
+						 else if(h < 300) r =   x, g =   0, b = 255;
+						 else             r = 255, g =   0, b =   x;
+						 return "rgb(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + ")";
+					};
+	
+					const PI2 = 2 * Math.PI;
+					const PIN_MARGIN = 10;
+					const PIN_RADIUS = 4;
 
-					var init = o => {
-						b = o;
-						o.addEventListener("click", click);
+					var draw = time => {
+						var w = canvas.width;
+						var c = canvas.getContext("2d");
+						var w2 = w/2;
+						var d = PI2/mod;
+
+						if(animate) {
+							if(ptime) {
+								delta = animationrate * (time - ptime) + delta;
+								if(delta > 1) {
+									fac += (delta | 0);
+									if(fac > 360) fac = 1;
+									delta = delta % 1;
+									info.fac = fac;
+								}
+								info.delta = delta;
+							} else {
+								delta = 0;
+								info.delta = delta;
+							}
+							ptime = time;
+						}
+
+						c.clearRect(0, 0, w, w);
+						c.lineWidth = 1;
+						if(colormode != "cycle") c.beginPath();
+						for(var i = mod - 1; i >= 0; i--) {
+							var a = i * d;
+							if(colormode == "cycle") c.beginPath(); // Optimize with secondary loop (moving if outside loop)
+							c.moveTo(w2 + (w2 - PIN_MARGIN) * cos(a), w2 + (w2 - PIN_MARGIN) * sin(a));
+							a = (((i * (fac + delta)) % mod) | 0) * d;
+							c.lineTo(w2 + (w2 - PIN_MARGIN) * cos(a), w2 + (w2 - PIN_MARGIN) * sin(a));
+							if(colormode == "cycle") {
+								c.strokeStyle = H2RGB(color + mod - i, 1, 1);
+								c.stroke();
+							}
+						}
+						if(colormode != "cycle") {
+							c.strokeStyle = H2RGB(color + (colormode == "dynamic" ? (mod + fac) : 0), 1, 1);
+							c.stroke();
+						}
+						c.beginPath();
+						for(var i = mod - 1; i >= 0; i--) {
+							var a = i * d;
+							var ox = w2 + (w2 - PIN_MARGIN) * cos(a);
+							var oy = w2 + (w2 - PIN_MARGIN) * sin(a);
+							c.moveTo(ox + PIN_RADIUS, oy);
+							c.arc(ox, oy, PIN_RADIUS, 0, PI2);
+						}
+						c.strokeStyle = c.fillStyle = theme == "day" && "#000000" || "#FFFFFF";
+						c.lineWidth = 1;
+						c.stroke();
+						h = animate ? window.requestAnimationFrame(draw) : 0;
+					};
+	
+					var resize = e => {
+						var w = document.documentElement.clientWidth;
+						var h = document.documentElement.clientHeight;
+						w = w > h ? h : w;
+						if(w != canvas.offsetWidth) {
+							canvas.style.width = w + "px";
+							canvas.style.height = w + "px";
+						} if(w != canvas.width) {
+							canvas.width = w;
+							canvas.height = w;
+							redraw();
+						}
+					};
+	
+					var redraw = () => {
+						if(!h) h = window.requestAnimationFrame(draw);
 					};
 
-					Object.defineProperty(init, "disabled", {
-						set:function(f) { b.disabled = f; }
+					redraw.init = (o, m, f, c, x, t, a) => {
+						canvas = o;
+						mod = m;
+						fac = f;
+						color = c;
+						colormode = x;
+						theme = t;
+						animate = a;
+						window.addEventListener("resize", resize);
+						resize();
+					};
+	
+					redraw.faster = () => animationrate *= 2;
+	
+					redraw.slower = () => animationrate /= 2;
+	
+					Object.defineProperty(redraw, "animate", {
+						get: function() {
+							return animate;
+						},
+						set: function(v) {
+							animate = v ? true : false;
+							if(animate) {
+								ptime = undefined;
+							} else {
+								delta = 0;
+								info.delta = delta;
+							}
+							redraw();
+						}
 					});
 
-					return init;
-				})();
-
-				var stats = (function(){
-					var click = e => info(!info());
-
-					return o => o.addEventListener("click", click);
-
-				})();
-
-				var animate = (function(){
-					var animate = (o, p) => {
-						var c = o.children;
-						draw.animate = p;
-						c[0].style.display = draw.animate ? "block" : "none";
-						c[1].style.display = draw.animate ? "none" : "block";
-						settings.disabled = draw.animate;
-						mod.disabled = draw.animate;
-						fac.disabled = draw.animate;
-						color.disabled = draw.animate;
-						panel("animate", draw.animate);
-					};
-
-					var click = e => animate(e.currentTarget, !draw.animate);
-
-					return o => {
-						animate(o, draw.animate);
-						o.addEventListener("click", click);
-					};
-
-				})();
-
-				var theme = (function(){
-					var theme = (o, p) => {
-						var c = o.children;
-						draw.theme = p;
-						c[0].style.display = draw.theme == "day" ? "block" : "none";
-						c[1].style.display = draw.theme == "day" ? "none" : "block";
-						document.body.style.setProperty("--bgcolor", draw.theme == "day" ? themeDayBackground : themeNightBackground);
-						document.body.style.setProperty("--color", draw.theme == "day" ? themeDayColor : themeNightColor);
-						document.body.style.setProperty("--highlight", draw.theme == "day" ? themeDayHighlight : themeNightHighlight);
-						document.body.style.setProperty("--highlightdark", draw.theme == "day" ? themeDayHighlightDark : themeNightHighlightDark);
-					};
-
-					var click = e => theme(e.currentTarget, draw.theme == "day" ? "night" : "day");
-
-					return o => {
-						theme(o, draw.theme);
-						o.addEventListener("click", click);
-					};
-
-				})();
-
-				var mod = (function(){
-					var b;
-
-					var click = e => panel("mod");
-
-					var init = o => {
-						b = o;
-						o.addEventListener("click", click);
-					};
-
-					Object.defineProperty(init, "disabled", {
-						set:function(f) { b.disabled = f; }
+					Object.defineProperty(redraw, "mod", {
+						get: function() {
+							return mod;
+						},
+						set: function(v) {
+							var t = mod;
+							if(v < 1 || v > 360) return;
+							mod = v;
+							if(v != t) {
+								info.mod = v;
+								redraw();
+							}
+						}
+					});
+	
+					Object.defineProperty(redraw, "fac", {
+						get: function() {
+							return fac;
+						},
+						set: function(v) {
+							var t = fac;
+							if(v < 1 || v > 360) return;
+							fac = v;
+							if(v != t) {
+								info.fac = v;
+								redraw();
+							}
+						}
+					});
+	
+					Object.defineProperty(redraw, "color", {
+						get: function() {
+							return color;
+						},
+						set: function(v) {
+							var t = color;
+							if(v < 1 || v > 360) return;
+							color = v;
+							if(v != t) redraw();
+						}
+					});
+	
+					Object.defineProperty(redraw, "colormode", {
+						get: function() {
+							return colormode;
+						},
+						set: function(v) {
+							var t = colormode;
+							if(v != "flat" && v != "dynamic" && v != "cycle") return;
+							colormode = v;
+							if(v != t) redraw();
+						}
+					});
+	
+					Object.defineProperty(redraw, "theme", {
+						get: function() {
+							return theme;
+						},
+						set: function(v) {
+							var t = theme;
+							if(v != "day" && v != "night") return;
+							theme = v;
+							if(v != t) redraw();
+						}
 					});
 
-					return init;
+					return redraw;
 				})();
 
-				var fac = (function(){
-					var b;
+	/* Buttons */
+				var buttons = (function(){
+					var zoom = (function(){
+						var state;
+		
+						var zoom = (o, p) => {
+							var c = o.children;
+							state = p;
+							c[0].style.display = state ? "none" : "block";
+							c[1].style.display = state ? "block" : "none";
+							document.body.style.setProperty("--btnsize", state ? zoomInBtnSize : zoomOutBtnSize);
+						};
+		
+						var click = e => zoom(e.currentTarget, !state);
+		
+						return o => {
+							zoom(o, false);
+							o.addEventListener("click", click);
+						};
+		
+					})();
 
-					var click = e => panel("fac");
+					var settings = (function(){
+						var b;
+		
+						var click = e => panel("settings");
+		
+						var init = o => {
+							b = o;
+							o.addEventListener("click", click);
+						};
 
-					var init = o => {
-						b = o;
-						o.addEventListener("click", click);
-					};
+						Object.defineProperty(init, "disabled", {
+							set:function(f) { b.disabled = f; }
+						});
 
-					Object.defineProperty(init, "disabled", {
-						set:function(f) { b.disabled = f; }
-					});
+						return init;
+					})();
 
-					return init;
-				})();
+					var stats = (function(){
+						var click = e => info(!info());
+		
+						return o => o.addEventListener("click", click);
+		
+					})();
+	
+					var animate = (function(){
+						var animate = (o, p) => {
+							var c = o.children;
+							draw.animate = p;
+							c[0].style.display = draw.animate ? "block" : "none";
+							c[1].style.display = draw.animate ? "none" : "block";
+							settings.disabled = draw.animate;
+							mod.disabled = draw.animate;
+							fac.disabled = draw.animate;
+							color.disabled = draw.animate;
+							panel("animate", draw.animate);
+						};
+		
+						var click = e => animate(e.currentTarget, !draw.animate);
+		
+						return o => {
+							animate(o, draw.animate);
+							o.addEventListener("click", click);
+						};
+		
+					})();
+	
+					var theme = (function(){
+						var theme = (o, p) => {
+							var c = o.children;
+							draw.theme = p;
+							c[0].style.display = draw.theme == "day" ? "block" : "none";
+							c[1].style.display = draw.theme == "day" ? "none" : "block";
+							document.body.style.setProperty("--bgcolor", draw.theme == "day" ? themeDayBackground : themeNightBackground);
+							document.body.style.setProperty("--color", draw.theme == "day" ? themeDayColor : themeNightColor);
+							document.body.style.setProperty("--highlight", draw.theme == "day" ? themeDayHighlight : themeNightHighlight);
+							document.body.style.setProperty("--highlightdark", draw.theme == "day" ? themeDayHighlightDark : themeNightHighlightDark);
+						};
 
-				var color = (function(){
-					var b;
+						var click = e => theme(e.currentTarget, draw.theme == "day" ? "night" : "day");
 
-					var click = e => panel("color");
+						return o => {
+							theme(o, draw.theme);
+							o.addEventListener("click", click);
+						};
 
-					var init = o => {
-						b = o;
-						o.addEventListener("click", click);
-					};
+					})();
+	
+					var mod = (function(){
+						var b;
+		
+						var click = e => panel("mod");
+		
+						var init = o => {
+							b = o;
+							o.addEventListener("click", click);
+						};
+		
+						Object.defineProperty(init, "disabled", {
+							set:function(f) { b.disabled = f; }
+						});
+		
+						return init;
+					})();
+	
+					var fac = (function(){
+						var b;
+		
+						var click = e => panel("fac");
+		
+						var init = o => {
+							b = o;
+							o.addEventListener("click", click);
+						};
+		
+						Object.defineProperty(init, "disabled", {
+							set:function(f) { b.disabled = f; }
+						});
+		
+						return init;
+					})();
+	
+					var color = (function(){
+						var b;
+		
+						var click = e => panel("color");
+		
+						var init = o => {
+							b = o;
+							o.addEventListener("click", click);
+						};
+		
+						Object.defineProperty(init, "disabled", {
+							set:function(f) { b.disabled = f; }
+						});
+		
+						return init;
+					})();
 
-					Object.defineProperty(init, "disabled", {
-						set:function(f) { b.disabled = f; }
-					});
-
-					return init;
-				})();
-
-				var colormode = (function(){
-					var colormode = (o, p) => {
-						var c = o.children;
-						draw.colormode = p;
-						c[0].style.display = draw.colormode == "flat" ? "block" : "none";
-						c[1].style.display = draw.colormode == "dynamic" ? "block" : "none";
-						c[2].style.display = draw.colormode == "cycle" ? "block" : "none";
-					};
-
-					var click = e => colormode(e.currentTarget, draw.colormode == "flat" ? "dynamic" : draw.colormode == "dynamic" ? "cycle" : "flat");
+					var colormode = (function(){
+						var colormode = (o, p) => {
+							var c = o.children;
+							draw.colormode = p;
+							c[0].style.display = draw.colormode == "flat" ? "block" : "none";
+							c[1].style.display = draw.colormode == "dynamic" ? "block" : "none";
+							c[2].style.display = draw.colormode == "cycle" ? "block" : "none";
+						};
+		
+						var click = e => colormode(e.currentTarget, draw.colormode == "flat" ? "dynamic" : draw.colormode == "dynamic" ? "cycle" : "flat");
+		
+						return o => {
+							colormode(o, draw.colormode);
+							o.addEventListener("click", click);
+						};
+		
+					})();
 
 					return o => {
-						colormode(o, draw.colormode);
-						o.addEventListener("click", click);
+						zoom(o.querySelector("button.zoom"));
+						settings(o.querySelector("button.settings"));
+						stats(o.querySelector("button.info"));
+						theme(o.querySelector("button.theme"));
+						mod(o.querySelector("button.mod"));
+						fac(o.querySelector("button.fac"));
+						color(o.querySelector("button.color"));
+						colormode(o.querySelector("button.colormode"));
+						animate(o.querySelector("button.animate"));
 					};
-
+	
 				})();
-
-				return o => {
-					zoom(o.querySelector("button.zoom"));
-					settings(o.querySelector("button.settings"));
-					stats(o.querySelector("button.info"));
-					theme(o.querySelector("button.theme"));
-					mod(o.querySelector("button.mod"));
-					fac(o.querySelector("button.fac"));
-					color(o.querySelector("button.color"));
-					colormode(o.querySelector("button.colormode"));
-					animate(o.querySelector("button.animate"));
-				};
-
-			})();
 
 /* Copyright and license */
-			var copyright = (function() {
-				var dialog;
+				var copyright = (function() {
+					var dialog;
+	
+					var dismiss = () => dialog.style.display = "none";
+	
+					var show = () => dialog.style.display = "block";
 
-				var dismiss = () => dialog.style.display = "none";
+					var init = (o, d) => {
+						o.innerText = document.querySelector("head meta[name=copyright]").getAttribute("content");
+						d.querySelector("div article > h2").innerText = document.head.querySelector("meta[name=application-name]").getAttribute("content");
+						d.querySelector("div article p:nth-of-type(1)").innerText = document.head.querySelector("meta[name=description]").getAttribute("content");
+						d.querySelector("div article p:nth-of-type(2)").innerText = document.head.querySelector("meta[name=copyright]").getAttribute("content");
+						d.querySelector("div article pre").innerText = document.head.querySelector("script.license").innerText;
+						d.querySelector("div > span").addEventListener("click", dismiss);
+						o.addEventListener("click", show);
+						dialog = d;
+					};
 
-				var show = () => dialog.style.display = "block";
-
-				var init = (o, d) => {
-					o.innerText = document.querySelector("head meta[name=copyright]").getAttribute("content");
-					d.querySelector("div article > h2").innerText = document.head.querySelector("meta[name=application-name]").getAttribute("content");
-					d.querySelector("div article p:nth-of-type(1)").innerText = document.head.querySelector("meta[name=description]").getAttribute("content");
-					d.querySelector("div article p:nth-of-type(2)").innerText = document.head.querySelector("meta[name=copyright]").getAttribute("content");
-					d.querySelector("div article pre").innerText = document.head.querySelector("script.license").innerText;
-					d.querySelector("div > span").addEventListener("click", dismiss);
-					o.addEventListener("click", show);
-					dialog = d;
-				};
-
-				return init;
-			})();
+					return init;
+				})();
 
 /* Initialize and set defaults */
-			panel.init(document.querySelector("body div.panel"), "");
-			copyright(document.querySelector("body div.copyright > p"), document.querySelector("body div.copyright > div"));
-			info.init(document.querySelector("body div.info"), initInfo);
-			draw.init(document.querySelector("body canvas.canvas"), initMod, initFac, initColor, initColormode, initTheme, initAnimate);
-			buttons(document.querySelector("body div.buttons"));
+				panel.init(document.querySelector("body div.panel"), "");
+				copyright(document.querySelector("body div.copyright > p"), document.querySelector("body div.copyright > div"));
+				info.init(document.querySelector("body div.info"), initInfo);
+				draw.init(document.querySelector("body canvas.canvas"), initMod, initFac, initColor, initColormode, initTheme, initAnimate);
+				buttons(document.querySelector("body div.buttons"));
 
-		})();
-	</script>
+			})();
+		</script>
+	</body>
 
 </html>
