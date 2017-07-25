@@ -58,149 +58,149 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 		</script>
-	</head>
 
-	<style type="text/css">
-		body {
+		<style type="text/css">
+			body {
 /* These varaibles should be defined here - but are moved to the JS (convience) */
-		/*
-			--themeDayColor
-			--themeDayBackground
-			--themeDayHighlight
-			--themeNightColor
-			--themeNightBackground
-			--themeNightHighlight
-		*/
+			/*
+				--themeDayColor
+				--themeDayBackground
+				--themeDayHighlight
+				--themeNightColor
+				--themeNightBackground
+				--themeNightHighlight
+			*/
 
-		/*	Variables used in the CSS */
-		/*
-			--color: black; 
-			--bgcolor: white;
-			--highlight: Green;
-			--patchpos: 51px;
-			--btnsize: 36px;
-		*/
-			--fontsize:calc(var(--btnsize)/2);
-			--imgsize: 90%;
-			--imgpadding: 5%;
-		}
+			/*	Variables used in the CSS */
+			/*
+				--color: black; 
+				--bgcolor: white;
+				--highlight: Green;
+				--highlightdark: #B33000;
+				--patchpos: 51px;
+				--btnsize: 36px;
 
-		html, body {position:fixed;top:0;bottom:0;left:0;right:0;margin:0;padding:0;height:100%;width:100%}
-		body{background-color:var(--bgcolor);font-size:var(--fontsize);}
+			*/
+				--fontsize:calc(var(--btnsize)/2);
+				--imgsize: 90%;
+				--imgpadding: 5%;
+			}
 
-		body canvas.canvas {position:fixed;top:0;left:0;z-index:-1;}
+			html, body {position:fixed;top:0;bottom:0;left:0;right:0;margin:0;padding:0;height:100%;width:100%}
+			body{background-color:var(--bgcolor);font-size:var(--fontsize);}
 
-		body div.copyright{}
-		body div.copyright > p {cursor:pointer;font:12px Arial, sans-serif;color:#888888AA;margin:0;padding:0;margin-left:1em;margin-top:0.5em;}
-		body div.copyright > div{display:none;position:fixed;z-index:1;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:#00000066;}
-		body div.copyright > div > div{font:12px Arial, sans-serif;position:absolute;left:50%;top:50%;height:65%;max-height:65%;transform:translate(-50%,-50%);background-color:#FEFEFE;border:2px solid #0086B3;border-top-width:2.5em;box-shadow:0 4px 8px 0 #00000033, 0 6px 20px 0 #00000033;border-radius:10px;}
-		body div.copyright > div > div h1{font-size:135%;font-weight:bold;margin:0;padding:0;margin-top:-1.2em;margin-left:0.5em;color:white;}
-		body div.copyright > div > div span{cursor:pointer;color:#CCCCCC;float:right;font-size:200%;font-weight:bold;margin-top:-1.3em;margin-right:0.25em;}
-		body div.copyright > div > div article{padding:2px 16px 16px 16px;display:flex;flex-direction:column;height:100%;}
-		body div.copyright > div > div article p:nth-of-type(1){font-size:115%}
-		body div.copyright > div > div article p:nth-of-type(2){text-align:right;}
-		body div.copyright > div > div article p:nth-of-type(3) a{margin-left:1.1em;}
-		body div.copyright > div > div article h2{font-size:125%;font-weight:bold;}
-		body div.copyright > div > div article pre{font:12px Courier, monospace;width:80ch;overflow:auto;flex-grow:1;}
+			body canvas.canvas {position:fixed;top:0;left:0;z-index:-1;}
 
-		svg{stroke:var(--color);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill:none;}
+			body div.copyright{}
+			body div.copyright > p {cursor:pointer;font:12px Arial, sans-serif;color:rgba(136,136,136,0.67);margin:0;padding:0;margin-left:1em;margin-top:0.5em;}
+			body div.copyright > div{display:none;position:fixed;z-index:1;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.4);}
+			body div.copyright > div > div{font:12px Arial, sans-serif;position:absolute;left:50%;top:50%;height:65%;max-height:65%;transform:translate(-50%,-50%);background-color:#FEFEFE;border:2px solid #0086B3;border-top-width:2.5em;box-shadow:0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.2);border-radius:10px;}
+			body div.copyright > div > div h1{font-size:135%;font-weight:bold;margin:0;padding:0;margin-top:-1.2em;margin-left:0.5em;color:white;}
+			body div.copyright > div > div span{cursor:pointer;color:#CCCCCC;float:right;font-size:200%;font-weight:bold;margin-top:-1.3em;margin-right:0.25em;}
+			body div.copyright > div > div article{padding:2px 16px 16px 16px;display:flex;flex-direction:column;height:100%;}
+			body div.copyright > div > div article p:nth-of-type(1){font-size:115%}
+			body div.copyright > div > div article p:nth-of-type(2){text-align:right;}
+			body div.copyright > div > div article p:nth-of-type(3) a{margin-left:1.1em;}
+			body div.copyright > div > div article h2{font-size:125%;font-weight:bold;}
+			body div.copyright > div > div article pre{font:12px Courier, monospace;width:80ch;overflow:auto;flex-grow:1;}
 
-		body div.buttons{position:fixed;width:calc(var(--btnsize) + 20px);}
-		button{display:inline-block;margin:5px 10px;padding:0;width:var(--btnsize);height:var(--btnsize);background:transparent;border:2px solid transparent;border-radius:50%;transition: border-color 0.2s,background-color 0.5s;}
-		button:hover{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);transition:border-color,box-shadow 0.2s,background-color 0.5s;}
-		button:active{background-color:var(--highlight);transition: background-color 0s;}
-		button svg{width:var(--imgsize);height:var(--imgsize);margin:calc(50% - var(--imgsize)/2);padding:0;display:block;}
-		/* These does not seem to work - continue to display hover and active despite being removed */
-		button:disabled:hover{border-color:transparent;box-shadow:none;};
-		button:disabled:active{border-color:transparent:none;background-color:transparent;}
-		button:disabled svg{stroke:#88888888;}
+			svg{stroke:var(--color);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;fill:none;}
+
+			body div.buttons{position:fixed;width:calc(var(--btnsize) + 20px);}
+			button{display:inline-block;margin:5px 10px;padding:0;width:var(--btnsize);height:var(--btnsize);background:transparent;border:2px solid transparent;border-radius:50%;transition: border-color 0.2s,background-color 0.5s;}
+			button:hover{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);transition:border-color,box-shadow 0.2s,background-color 0.5s;}
+			button:active{background-color:var(--highlight);transition: background-color 0s;}
+			button:focus{outline:0;}
+			button svg{width:var(--imgsize);height:var(--imgsize);margin:calc(50% - var(--imgsize)/2);padding:0;display:block;}
+			/* These does not seem to work - continue to display hover and active despite being removed */
+			button:disabled:hover{border-color:transparent;box-shadow:none;};
+			button:disabled:active{border-color:transparent:none;background-color:transparent;}
+			button:disabled svg{stroke:rgba(136,136,136,0.53);}
 
 /* Panels */
-		body div.panel{display:none;position:fixed;padding:0:margin:0;border:0;background-color:#CCCCCC44;border-radius:10px;white-space:nowrap;font:var(--fntsize) Arial, sans-serif;color:var(--color);}
-		body div.panel:after{content:"";position:absolute;background-color:inherit;border-radius:10px;}
-		body div.panel > button{display:none;margin-top:10px;margin-right:0;}
-		body div.panel button + button{margin-left:0;margin-right:10px;}
-		body div.panel > input[type=range]{display:none;padding-right:18px;height:calc(var(--btnsize) - 8px);}
-		body div.panel input[type=range]{-webkit-appearance:none;background:transparent;}
-		body div.panel input[type=range]:focus {outline:none;}
-		body div.panel input[type=range]::-webkit-slider-runnable-track{width:100%;height:10px;cursor:pointer;box-shadow:none;background:var(--highlight);border-radius:3px;border:0;}
-		body div.panel input[type=range]::-moz-range-track{width:100%;height:10px;cursor: pointer;box-shadow:none;background:var(--highlight);border-radius:3px;border:0;}
-		body div.panel input[type=range]::-ms-track{width:100%;height:10px;cursor:pointer;background:transparent;border-color:transparent;color:transparent;}
-		body div.panel input[type=range]::-ms-fill-lower, #sliderpanel input[type=range]::-ms-fill-upper{background:var(--highlight);border:0;border-radius:3px;box-shadow:none;}
-		body div.panel input[type=range]:focus::-ms-fill-lower, #sliderpanel input[type=range]:focus::-ms-fill-upper {background:var(--highlight);}
-		body div.panel input[type=range]::-webkit-slider-thumb{box-shadow:none;border:1px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;-webkit-appearance: none;margin-top:calc(var(--btnsize) * -0.25);}
-		body div.panel input[type=range]:focus::-webkit-slider-runnable-track {background:var(--highlight);}
-		body div.panel input[type=range]::-moz-range-thumb{box-shadow:none;border:1px solid var(--highlight);height:cacl(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;}
-		body div.panel input[type=range]::-ms-thumb{margin-top:1px;box-shadow:none;border:1px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background: var(--bgcolor);cursor: pointer;}
-		body div.panel > label {display:none;font-size:var(--fontsize);margin:10px;}
-		body div.panel > label input[type=number]{font-size:var(--fontsize);float:right;margin-top:-0.25ex;}
-		body div.panel > p{display:none;color:red;}
+			body div.panel{display:none;position:fixed;padding:0;margin:0;border:0;background-color:rgba(204,204,204,0.25);border-radius:10px;white-space:nowrap;font:var(--fntsize) Arial, sans-serif;color:var(--color);}
+			body div.panel:after{content:"";position:absolute;background-color:inherit;border-radius:10px;}
+			body div.panel > button{display:none;margin-top:10px;margin-right:0;}
+			body div.panel button + button{margin-left:0;margin-right:10px;}
+			body div.panel > input[type=range]{display:none;padding-right:18px;height:calc(var(--btnsize) - 8px);}
+			body div.panel input[type=range]{-webkit-appearance:none;background:transparent;}
+			body div.panel input[type=range]:focus {outline:none;}
+			body div.panel input[type=range]::-webkit-slider-runnable-track{width:100%;height:10px;cursor:pointer;box-shadow:none;background:var(--highlightdark);border-radius:3px;border:0;}
+			body div.panel input[type=range]:focus::-webkit-slider-runnable-track {background:var(--highlightdark);}
+			body div.panel input[type=range]::-moz-range-track{width:100%;height:10px;cursor: pointer;box-shadow:none;background:var(--highlightdark);border-radius:3px;border:0;}
+			body div.panel input[type=range]::-moz-focus-outer{border:0;}
+			body div.panel input[type=range]::-ms-track{width:100%;height:10px;cursor:pointer;background:transparent;border-color:transparent;color:transparent;}
+			body div.panel input[type=range]::-ms-fill-lower, #sliderpanel input[type=range]::-ms-fill-upper{background:var(--highlightdark);border:0;border-radius:3px;box-shadow:none;}
+			body div.panel input[type=range]:focus::-ms-fill-lower, #sliderpanel input[type=range]:focus::-ms-fill-upper {background:var(--highlightdark);}
+			body div.panel input[type=range]::-webkit-slider-thumb{box-shadow:none;border:2px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;-webkit-appearance: none;margin-top:calc(var(--btnsize) * -0.25);}
+			body div.panel input[type=range]::-moz-range-thumb{box-shadow:none;border:2px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background:var(--bgcolor);cursor: pointer;}
+			body div.panel input[type=range]::-ms-thumb{margin-top:1px;box-shadow:none;border:2px solid var(--highlight);height:calc(var(--btnsize) * 0.75);width:calc(var(--btnsize) * 0.75);border-radius:50%;background: var(--bgcolor);cursor: pointer;}
+			body div.panel > label {display:none;font-size:var(--fontsize);margin:10px;text-align:right;}
+			body div.panel > label input[type=number]{dsiplay:inline-block;font-size:var(--fontsize);margin-top:-0.25ex;width:3em;margin-left:2em;text-align:right;}
+			body div.panel > p{display:none;color:red;}
 
-		body div.panel.mod, body div.panel.fac, body div.panel.color{display:block;max-width:100%;}
-		body div.panel.mod > button.increment, body div.panel.mod > button.decrement,
-		body div.panel.fac > button.increment, body div.panel.fac > button.decrement,
-		body div.panel.color > button.increment, body div.panel.color > button.decrement{display:inline-block;}
-		body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{display:inline-block;}
-		body div.panel.mod:after, body div.panel.fac:after, body div.panel.color:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);border-top-left-radius:0;border-top-right-radius:0;top:100%;}
-		body div.panel.mod:after{left:calc(3*(var(--btnsize) + 10px));}
-		body div.panel.fac:after{left:calc(2*(var(--btnsize) + 10px));}
-		body div.panel.color:after{left:calc((var(--btnsize) + 10px));}
+			body div.panel.mod, body div.panel.fac, body div.panel.color{display:block;max-width:100%;}
+			body div.panel.mod > button.increment, body div.panel.mod > button.decrement,
+			body div.panel.fac > button.increment, body div.panel.fac > button.decrement,
+			body div.panel.color > button.increment, body div.panel.color > button.decrement{display:inline-block;}
+			body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{display:inline-block;}
+			body div.panel.mod:after, body div.panel.fac:after, body div.panel.color:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);border-top-left-radius:0;border-top-right-radius:0;top:100%;}
+			body div.panel.mod:after{left:calc(3*(var(--btnsize) + 10px));}
+			body div.panel.fac:after{left:calc(2*(var(--btnsize) + 10px));}
+			body div.panel.color:after{left:calc((var(--btnsize) + 10px));}
 
-		body div.panel.settings{display:block;width:7.5em;}
-		body div.panel.settings > label {display:block;}
+			body div.panel.settings{display:block;width:7.5em;}
+			body div.panel.settings > label {display:block;}
 
-		body div.panel.animate{display:block;height:calc(var(--btnsize) + 10px);}
-		body div.panel.animate > button.slower,
-		body div.panel.animate > button.faster{display:inline-block;margin-top:5px;}
-		body div.panel.unimplemented > p{display:block;margin:10px;text-align:center;vertical-align:middle;}
-		body div.panel.unimplemented > p:before{content:"Unimplemented";font-family:Arial, sans-serif;font-weight:bold;}
+			body div.panel.animate{display:block;height:calc(var(--btnsize) + 10px);}
+			body div.panel.animate > button.slower,
+			body div.panel.animate > button.faster{display:inline-block;margin-top:5px;}
+			body div.panel.unimplemented > p{display:block;margin:10px;text-align:center;vertical-align:middle;}
+			body div.panel.unimplemented > p:before{content:"Unimplemented";font-family:Arial, sans-serif;font-weight:bold;}
 
 /* Info block */
-		body div.info{position:fixed;font:var(--fontsize) arial, sans-serif;color:var(--color);width:6em;top:18px;left:15px;}
-		body div.info dl{padding:5px;margin:0;}
-		body div.info dt{font-weight:bold;float:left;clear:left;min-width:2.25em;text-align:right;}
-		body div.info dt:after{content:":";}
-		body div.info dd{margin:0 0 0 2.75em;}
-		body div.info dd.delta{margin:0;background-color:var(--color);width:0%;height:4px;}
-
-
+			body div.info{position:fixed;font:var(--fontsize) arial, sans-serif;color:var(--color);width:6em;top:18px;left:15px;}
+			body div.info dl{padding:5px;margin:0;}
+			body div.info dt{font-weight:bold;float:left;clear:left;min-width:2.25em;text-align:right;}
+			body div.info dt:after{content:":";}
+			body div.info dd{margin:0 0 0 2.75em;}
+			body div.info dd.delta{margin:0;background-color:var(--color);width:0%;height:4px;}
 
 /* Landscape */
-		@media all and (orientation: landscape) {
-			body div.buttons{bottom:5px;right:0;}
+			@media all and (orientation: landscape) {
+				body div.buttons{bottom:5px;right:0;}
 
-			body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{width:65vh;}
-			body div.panel.mod > button, body div.panel.fac > button, body div.panel.color > button{transform:rotate(90deg);}
-			body div.panel.mod, body div.panel.fac, body div.panel.color{left:calc(100% - var(--btnsize) - 20px);bottom:5px;transform-origin:0% 100%;transform:rotate(270deg);}
+				body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{width:65vh;}
+				body div.panel.mod > button, body div.panel.fac > button, body div.panel.color > button{transform:rotate(90deg);}
+				body div.panel.mod, body div.panel.fac, body div.panel.color{left:calc(100% - var(--btnsize) - 20px);bottom:5px;transform-origin:0% 100%;transform:rotate(270deg);}
 
-			body div.panel.settings{right:calc(var(--btnsize) + 20px);top:calc(100% - 8 * (var(--btnsize) + 10px) - 5px);border-top-right-radius:0;}
-			body div.panel.settings:after{width:calc(var(--btnsize) + 15px);height:calc(var(--btnsize) + 10px);top:0;right:calc(-15px - var(--btnsize));border-top-left-radius:0;border-bottom-left-radius:0;}
+				body div.panel.settings{right:calc(var(--btnsize) + 20px);top:calc(100% - 8 * (var(--btnsize) + 10px) - 5px);border-top-right-radius:0;}
+				body div.panel.settings:after{width:calc(var(--btnsize) + 15px);height:calc(var(--btnsize) + 10px);top:0;right:calc(-15px - var(--btnsize));border-top-left-radius:0;border-bottom-left-radius:0;}
 
-			body div.panel.animate{right:calc(var(--btnsize) + 20px);top:calc(100% - 6 * (var(--btnsize) + 10px) - 5px);border-top-right-radius:0;border-bottom-right-radius:0;}
-			body div.panel.animate:after{width:calc(var(--btnsize) + 15px);height:calc(var(--btnsize) + 10px);top:0;right:calc(-15px - var(--btnsize));border-top-left-radius:0;border-bottom-left-radius:0;}
-		}
+				body div.panel.animate{right:calc(var(--btnsize) + 20px);top:calc(100% - 6 * (var(--btnsize) + 10px) - 5px);border-top-right-radius:0;border-bottom-right-radius:0;}
+				body div.panel.animate:after{width:calc(var(--btnsize) + 15px);height:calc(var(--btnsize) + 10px);top:0;right:calc(-15px - var(--btnsize));border-top-left-radius:0;border-bottom-left-radius:0;}
+			}
 
 /* Portrait */
-		@media all and (orientation: portrait) {
-			body div.buttons button{transform:rotate(270deg);}
-			body div.buttons{bottom:0;left:calc(-15px - var(--btnsize));transform-origin:100% 100%;transform: rotate(90deg);}
+			@media all and (orientation: portrait) {
+				body div.buttons button{transform:rotate(270deg);}
+				body div.buttons{bottom:0;left:calc(-15px - var(--btnsize));transform-origin:100% 100%;transform: rotate(90deg);}
 
-			body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{width:65vw;}
-			body div.panel.mod, body div.panel.fac, body div.panel.color{left:5px;bottom:calc(var(--btnsize) + 20px);}
+				body div.panel.mod > input[type=range], body div.panel.fac > input[type=range], body div.panel.color > input[type=range]{width:65vw;}
+				body div.panel.mod, body div.panel.fac, body div.panel.color{left:5px;bottom:calc(var(--btnsize) + 20px);}
 
-			body div.panel.settings{right:calc(100% - (var(--btnsize) + 10px) * 8 - 5px);bottom:calc(var(--btnsize) + 20px);border-bottom-right-radius:0;}
-			body div.panel.settings:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);right:0;top:100%;border-top-left-radius:0;border-top-right-radius:0;}
+				body div.panel.settings{right:calc(100% - (var(--btnsize) + 10px) * 8 - 5px);bottom:calc(var(--btnsize) + 20px);border-bottom-right-radius:0;}
+				body div.panel.settings:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);right:0;top:100%;border-top-left-radius:0;border-top-right-radius:0;}
 
-			body div.panel.animate{right:calc(100% - (var(--btnsize) + 10px) * 6 - 5px);bottom:calc(var(--btnsize) + 20px);border-bottom-right-radius:0;}
-			body div.panel.animate:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);right:0;top:100%;border-top-left-radius:0;border-top-right-radius:0;}
-		}
+				body div.panel.animate{right:calc(100% - (var(--btnsize) + 10px) * 6 - 5px);bottom:calc(var(--btnsize) + 20px);border-bottom-right-radius:0;}
+				body div.panel.animate:after{width:calc(var(--btnsize) + 10px);height:calc(var(--btnsize) + 15px);right:0;top:100%;border-top-left-radius:0;border-top-right-radius:0;}
+			}
 
 /* Disable the hover ring on touch and move it to activate */
-		html.touch button:hover{border-color:transparent;box-shadow:none;}
-		html.touch button:active{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);}
-
-	</style>
-
+			html.touch button:hover{border-color:transparent;box-shadow:none;}
+			html.touch button:active{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);}
+		</style>
+	</head>
 	<body>
 		<canvas class="canvas" width="100" height="100"></canvas>	
 
@@ -208,7 +208,7 @@ SOFTWARE.
 			<p></p>
 			<div>
 				<div>
-					<span>&times;</span>
+					<span>×</span>
 					<h1>About</h1>
 					<article>
 						<h2></h2>
@@ -296,7 +296,7 @@ SOFTWARE.
 				var isTouch = false;
 				var isTouchTimer;
 				var curRootClass = "";
-	
+
 				function addtouchclass(e) {
 					clearTimeout(isTouchTimer);
 					isTouch = true;
@@ -320,14 +320,16 @@ SOFTWARE.
 			})();
 
 /* Default color values - these should be in the CSS... */
-			var themeDayColor			= "black";
+			var themeDayColor		= "black";
 			var themeDayBackground		= "white";
 			var themeDayHighlight		= "DeepSkyBlue";
-			var themeNightColor			= "white";
+			var themeDayHighlightDark	= "#0086B3";
+			var themeNightColor		= "white";
 			var themeNightBackground	= "black";
 			var themeNightHighlight		= "OrangeRed";
-			var zoomInBtnSize			= "48px";
-			var zoomOutBtnSize			= "36px";
+			var themeNightHighlightDark	= "#B33000";
+			var zoomInBtnSize		= "48px";
+			var zoomOutBtnSize		= "36px";
 
 /* Various default value */
 			var initMod = 200;
@@ -379,7 +381,7 @@ SOFTWARE.
 				var panel;
 				var range;
 				var state = "";
-	
+
 				var mod = e => draw.mod = Number(e.target.value);
 
 				var fac = e => draw.fac = Number(e.target.value);
@@ -390,25 +392,25 @@ SOFTWARE.
 					else if(state == "fac") draw.fac = v;
 					else if(state == "color") draw.color = v;
 				};
-	
+
 				var send = () => {
 					var e = document.createEvent("Event");
 					e.initEvent("input", true, true);
 					range.dispatchEvent(e);
 				};
-	
+
 				var inc = e => {
 					range.stepUp(1);
 					send();
 				};
-				
+
 				var dec = e => {
 					range.stepDown(1);
 					send();
 				};
 
 				var slower = e => draw.slower();
-				
+
 				var faster = e => draw.faster();
 
 				var show = (s, f) => {
@@ -440,7 +442,7 @@ SOFTWARE.
 					repeatButton(o.querySelector("button.slower"), slower, 750, 125);
 					show(s);
 				};
-	
+
 				return show;
 			})();
 
@@ -451,19 +453,19 @@ SOFTWARE.
 				var pf;
 				var pd;
 				var state;
-				
+
 				var mod = v => {
 					if(state) pm.innerText = v;
 				};
-					
+
 				var fac = v => {
 					if(state) pf.innerText = v;
 				};
-				
+
 				var delta = v => {
 					pd.style.width = ((v * 100) | 0) + "%";
 				};
-				
+
 				var show = s => {
 					if(s !== undefined) {
 						state = s;
@@ -494,9 +496,9 @@ SOFTWARE.
 /* The draw function */
 			var draw = (function(){
 				var h = 0;
-				
+
 				var canvas;
-				
+
 				var mod;
 				var fac;
 				var color;
@@ -510,21 +512,21 @@ SOFTWARE.
 				var sin = Math.sin;
 				var cos = Math.cos;
 				var abs = Math.abs;
-				
+
 				var H2RGB = h => {
 					var x;
 					var r, g, b;
 					 h %= 360;
 					 x = 255 - 255*abs((h/60) % 2 - 1);
-					 if(h < 60)		  r = 255, g =	 x, b =	  0;
+					 if(h < 60)       r = 255, g =	 x, b =	  0;
 					 else if(h < 120) r =	x, g = 255, b =	  0;
 					 else if(h < 180) r =	0, g = 255, b =	  x;
 					 else if(h < 240) r =	0, g =	 x, b = 255;
 					 else if(h < 300) r =	x, g =	 0, b = 255;
-					 else			  r = 255, g =	 0, b =	  x;
+					 else             r = 255, g =	 0, b =	  x;
 					 return "rgb(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + ")";
 				};
-				
+
 				const PI2 = 2 * Math.PI;
 				const PIN_MARGIN = 10;
 				const PIN_RADIUS = 4;
@@ -583,7 +585,7 @@ SOFTWARE.
 					c.stroke();
 					h = animate ? window.requestAnimationFrame(draw) : 0;
 				};
-				
+
 				var resize = e => {
 					var w = document.documentElement.clientWidth;
 					var h = document.documentElement.clientHeight;
@@ -597,7 +599,7 @@ SOFTWARE.
 						redraw();
 					}
 				};
-				
+
 				var redraw = () => {
 					if(!h) h = window.requestAnimationFrame(draw);
 				};
@@ -613,11 +615,11 @@ SOFTWARE.
 					window.addEventListener("resize", resize);
 					resize();
 				};
-				
+
 				redraw.faster = () => animationrate *= 2;
-				
+
 				redraw.slower = () => animationrate /= 2;
-				
+
 				Object.defineProperty(redraw, "animate", {
 					get: function() {
 						return animate;
@@ -648,7 +650,7 @@ SOFTWARE.
 						}
 					}
 				});
-				
+
 				Object.defineProperty(redraw, "fac", {
 					get: function() {
 						return fac;
@@ -663,7 +665,7 @@ SOFTWARE.
 						}
 					}
 				});
-				
+
 				Object.defineProperty(redraw, "color", {
 					get: function() {
 						return color;
@@ -675,7 +677,7 @@ SOFTWARE.
 						if(v != t) redraw();
 					}
 				});
-				
+
 				Object.defineProperty(redraw, "colormode", {
 					get: function() {
 						return colormode;
@@ -687,7 +689,7 @@ SOFTWARE.
 						if(v != t) redraw();
 					}
 				});
-				
+
 				Object.defineProperty(redraw, "theme", {
 					get: function() {
 						return theme;
@@ -707,7 +709,7 @@ SOFTWARE.
 			var buttons = (function(){
 				var zoom = (function(){
 					var state;
-					
+
 					var zoom = (o, p) => {
 						var c = o.children;
 						state = p;
@@ -715,21 +717,21 @@ SOFTWARE.
 						c[1].style.display = state ? "block" : "none";
 						document.body.style.setProperty("--btnsize", state ? zoomInBtnSize : zoomOutBtnSize);
 					};
-					
+
 					var click = e => zoom(e.currentTarget, !state);
-					
+
 					return o => {
 						zoom(o, false);
 						o.addEventListener("click", click);
 					};
-					
+
 				})();
 
 				var settings = (function(){
 					var b;
-					
+
 					var click = e => panel("settings");
-					
+
 					var init = o => {
 						b = o;
 						o.addEventListener("click", click);
@@ -744,11 +746,11 @@ SOFTWARE.
 
 				var stats = (function(){
 					var click = e => info(!info());
-					
+
 					return o => o.addEventListener("click", click);
-					
+
 				})();
-				
+
 				var animate = (function(){
 					var animate = (o, p) => {
 						var c = o.children;
@@ -761,16 +763,16 @@ SOFTWARE.
 						color.disabled = draw.animate;
 						panel("animate", draw.animate);
 					};
-					
+
 					var click = e => animate(e.currentTarget, !draw.animate);
-					
+
 					return o => {
 						animate(o, draw.animate);
 						o.addEventListener("click", click);
 					};
-					
+
 				})();
-				
+
 				var theme = (function(){
 					var theme = (o, p) => {
 						var c = o.children;
@@ -780,6 +782,7 @@ SOFTWARE.
 						document.body.style.setProperty("--bgcolor", draw.theme == "day" ? themeDayBackground : themeNightBackground);
 						document.body.style.setProperty("--color", draw.theme == "day" ? themeDayColor : themeNightColor);
 						document.body.style.setProperty("--highlight", draw.theme == "day" ? themeDayHighlight : themeNightHighlight);
+						document.body.style.setProperty("--highlightdark", draw.theme == "day" ? themeDayHighlightDark : themeNightHighlightDark);
 					};
 
 					var click = e => theme(e.currentTarget, draw.theme == "day" ? "night" : "day");
@@ -790,55 +793,55 @@ SOFTWARE.
 					};
 
 				})();
-				
+
 				var mod = (function(){
 					var b;
-					
+
 					var click = e => panel("mod");
-					
+
 					var init = o => {
 						b = o;
 						o.addEventListener("click", click);
 					};
-					
+
 					Object.defineProperty(init, "disabled", {
 						set:function(f) { b.disabled = f; }
 					});
-					
+
 					return init;
 				})();
-				
+
 				var fac = (function(){
 					var b;
-					
+
 					var click = e => panel("fac");
-					
+
 					var init = o => {
 						b = o;
 						o.addEventListener("click", click);
 					};
-					
+
 					Object.defineProperty(init, "disabled", {
 						set:function(f) { b.disabled = f; }
 					});
-					
+
 					return init;
 				})();
-				
+
 				var color = (function(){
 					var b;
-					
+
 					var click = e => panel("color");
-					
+
 					var init = o => {
 						b = o;
 						o.addEventListener("click", click);
 					};
-					
+
 					Object.defineProperty(init, "disabled", {
 						set:function(f) { b.disabled = f; }
 					});
-					
+
 					return init;
 				})();
 
@@ -850,16 +853,16 @@ SOFTWARE.
 						c[1].style.display = draw.colormode == "dynamic" ? "block" : "none";
 						c[2].style.display = draw.colormode == "cycle" ? "block" : "none";
 					};
-					
+
 					var click = e => colormode(e.currentTarget, draw.colormode == "flat" ? "dynamic" : draw.colormode == "dynamic" ? "cycle" : "flat");
-					
+
 					return o => {
 						colormode(o, draw.colormode);
 						o.addEventListener("click", click);
 					};
-					
+
 				})();
-			
+
 				return o => {
 					zoom(o.querySelector("button.zoom"));
 					settings(o.querySelector("button.settings"));
@@ -871,15 +874,15 @@ SOFTWARE.
 					colormode(o.querySelector("button.colormode"));
 					animate(o.querySelector("button.animate"));
 				};
-				
+
 			})();
 
 /* Copyright and license */
 			var copyright = (function() {
 				var dialog;
-				
+
 				var dismiss = () => dialog.style.display = "none";
-				
+
 				var show = () => dialog.style.display = "block";
 
 				var init = (o, d) => {
