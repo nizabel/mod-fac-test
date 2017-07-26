@@ -23,7 +23,7 @@ A line is drawn between to pegs if the mutiplication of the first value with the
 
 ## The Colors
 
-There are three coloring methods used in the program. The first two are the same (circle and doucle cirlce) in that the figure is rendered using a single color. The first (cirlce mode) uses the color set with the color control (droplet), the second uses a color based on the color value, the module and the factor (added together).
+There are four coloring methods used in the program. The first two are the same (circle and doucle cirlce) in that the figure is rendered using a single color. The first (cirlce mode) uses the color set with the color control (droplet), the second uses a color based on the color value, the module and the factor (added together).
 
 The third method (patched circle) colors each line using a new color. The starting color can be set with the color control.
 
